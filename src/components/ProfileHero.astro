@@ -18,15 +18,33 @@ import GithubIcon from '../icons/GithubIcon.astro'
         and scalable web products with amazing user interfaces.
       </p>
       <nav>
-        <a href='mailto: jesus@zvl.dev'>
+        <a class='cta' href='mailto:jesus@zvl.dev'>
           <MailIcon width={24} height={24} />
            Send a message
         </a>
+        <div class='socials'>
+          <a
+            href='https://github.com/jesuszvl'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='See my code on GitHub'
+          >
+            <GithubIcon />
+          </a>
+          <a
+            href='https://www.linkedin.com/in/jesuszvl/'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='Connect with me on LinkedIn'
+          >
+            <LinkedInIcon />
+          </a>
+        </div>
       </nav>
     </section>
     <Picture
       src={profileImage}
-      alt='Profile Image'
+      alt='Jesús Zavala'
       width={320}
       height={320}
       class='profile'
@@ -78,10 +96,17 @@ import GithubIcon from '../icons/GithubIcon.astro'
 
   nav {
     display: flex;
-    gap: 46px;
+    align-items: center;
+    gap: 24px;
   }
 
-  a {
+  .socials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cta {
     background-color: #2f9085;
     padding: 12px 24px;
     border-radius: 12px;
