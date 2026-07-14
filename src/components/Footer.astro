@@ -1,83 +1,74 @@
 <footer>
-  <section class='responsive-content'>
+  <div class='responsive-content footer-content'>
     <a href='/' class='logo'>
       zvl<span class='sign'>.</span>dev
     </a>
-    <ul>
-      <li>
-        <a href='mailto:jesus@zvl.dev'>jesus@zvl.dev</a>
-      </li>
-      <li>
-        <a
-          href='https://github.com/jesuszvl'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          GitHub
-        </a>
-      </li>
-      <li>
-        <a
-          href='https://www.linkedin.com/in/jesuszvl/'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          LinkedIn
-        </a>
-      </li>
-    </ul>
+    <nav aria-label='Footer navigation'>
+      <a href='mailto:jesus@zvl.dev'>Email</a>
+      <a
+        href='https://github.com/jesuszvl'
+        target='_blank'
+        rel='noopener noreferrer'>GitHub</a
+      >
+      <a
+        href='https://www.linkedin.com/in/jesuszvl/'
+        target='_blank'
+        rel='noopener noreferrer'>LinkedIn</a
+      >
+    </nav>
     <p>© {new Date().getFullYear()} Jesús Zavala</p>
-  </section>
+  </div>
 </footer>
 
 <style>
   footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    text-align: center;
+    border-top: 1px solid var(--border);
   }
 
-  .responsive-content {
+  .footer-content {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 16px;
-    padding: 40px 24px;
-    width: 100%;
+    justify-content: space-between;
+    gap: 28px;
+    min-height: 96px;
   }
 
   .logo {
-    color: white;
-    font-size: 24px;
+    color: var(--text);
+    font-size: 20px;
     font-weight: 800;
   }
 
   .sign {
-    color: #2f9085;
+    color: var(--accent);
   }
 
-  ul {
+  nav {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
     gap: 24px;
-    font-size: 16px;
+  }
 
-    & li a {
-      color: rgba(255, 255, 255, 0.6);
+  nav a {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+  }
 
-      &:hover {
-        color: white;
-      }
-    }
+  nav a:hover {
+    color: var(--text);
   }
 
   p {
-    font-size: 14px;
-    margin: 0;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--subtle);
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    .footer-content {
+      min-height: 0;
+      flex-direction: column;
+      padding: 32px 0;
+    }
   }
 </style>

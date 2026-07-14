@@ -8,98 +8,117 @@ import playlistImage from '../images/portfolio/playlist.webp'
 const projects = [
   {
     title: 'MAKAHCO',
-    description: 'Rap & freestyle tools',
-    url: 'https://makah.co',
+    category: 'Creative product',
+    description:
+      'A mobile-first collection of writing prompts and freestyle practice tools built for fast, distraction-free sessions.',
+    focus: 'Product engineering · Mobile interaction',
     image: makahcoImage,
     color: '#fcd926',
-    isLight: false
+    featured: true
   },
   {
     title: 'VODYET',
-    description: 'Budget app for daily expenses',
+    category: 'Personal finance',
+    description:
+      'Expense tracking, category budgets, credit, and recurring payments brought into one focused workflow.',
+    focus: 'Full-stack product · Financial workflows',
     url: 'https://vodyet.com',
     image: vodyetImage,
-    color: '#2ca143',
-    isLight: true
+    color: '#44b95d'
   },
   {
     title: 'PREP LIBRE',
-    description: 'Open Platform for Electoral Preliminary Results',
-    url: 'https://preplibre.com',
+    category: 'Civic technology',
+    description:
+      'An open platform for managing and publishing preliminary electoral results with transparency at its core.',
+    focus: 'System design · Public data',
     image: prepLibreImage,
-    color: '#ed8b1c',
-    isLight: true
+    color: '#f2a03d'
   },
   {
     title: 'VS MY PLAYLIST',
-    description: 'Spotify Playlist Organizer',
+    category: 'Music tool',
+    description:
+      'A lightweight Spotify playlist organizer for comparing tracks and making quicker listening decisions.',
+    focus: 'Frontend engineering · Spotify API',
     url: 'https://jesuszvl.github.io/vs-my-playlist',
     image: playlistImage,
-    color: '#2b2667',
-    isLight: true
+    color: '#8b85e8'
   }
 ]
 ---
 
 <section class='portfolio' id='projects'>
-  <section class='responsive-content'>
-    <h2>Projects</h2>
-    <section class='projects'>
-      {
-        projects.map((project) => (
-          <ProjectCard
-            title={project.title}
-            description={project.description}
-            url={project.url}
-            image={project.image}
-            color={project.color}
-            isLight={project.isLight}
-          />
-        ))
-      }
-    </section>
-  </section>
+  <div class='responsive-content'>
+    <header class='section-header'>
+      <p class='eyebrow'>Selected work</p>
+      <div>
+        <h2>Products built around real workflows</h2>
+        <p>
+          From creative tools to public data and personal finance, each project
+          starts with a clear job for the user.
+        </p>
+      </div>
+    </header>
+    <div class='projects'>
+      {projects.map((project) => <ProjectCard {...project} />)}
+    </div>
+  </div>
 </section>
 
 <style>
   .portfolio {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 12px;
-    width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 88px 0;
+    border-bottom: 1px solid var(--border);
   }
 
-  .responsive-content {
-    display: flex;
-    flex-direction: column;
-    padding: 48px 24px;
-  }
-
-  .projects {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: row;
-    align-items: stretch;
-    gap: 32px;
-    width: 100%;
-
-    @media screen and (max-width: 760px) {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-
-  h2 {
-    color: white;
+  .section-header {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 720px);
+    gap: 40px;
     margin-bottom: 48px;
   }
 
-  p {
-    font-size: 24px;
-    margin-bottom: 42px;
+  .section-header h2 {
+    max-width: 620px;
+  }
+
+  .section-header div > p {
+    max-width: 620px;
+    margin-top: 18px;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .projects {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .portfolio {
+      padding: 64px 0;
+    }
+
+    .section-header {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .section-header div > p {
+      font-size: 17px;
+    }
+
+    .projects {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

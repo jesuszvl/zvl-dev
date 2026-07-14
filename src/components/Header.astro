@@ -1,77 +1,228 @@
-<header>
-  <nav class='responsive-content'>
-    <a href='/'>
+---
+import { Mail, Menu, X } from 'lucide-astro'
+---
+
+<header class='site-header'>
+  <div class='responsive-content header-content'>
+    <a href='/' class='logo' aria-label='ZVL.dev home'>
       zvl<span class='sign'>.</span>dev
     </a>
-    <ul>
-      <li><a href='/#projects'>Projects</a></li>
-      <li><a href='/#skills'>Skills</a></li>
-      <li><a href='/#experience'>Experience</a></li>
-    </ul>
-  </nav>
+    <nav class='desktop-nav' aria-label='Primary navigation'>
+      <a href='/#projects' data-section='projects'>Work</a>
+      <a href='/#skills' data-section='skills'>Expertise</a>
+      <a href='/#experience' data-section='experience'>Experience</a>
+      <a href='/#contact' class='contact-link' data-section='contact'>
+        <Mail size={17} aria-hidden='true' />
+         Contact
+      </a>
+    </nav>
+    <details class='mobile-menu'>
+      <summary aria-label='Open navigation'>
+        <span class='menu-icon'><Menu size={22} aria-hidden='true' /></span>
+        <span class='close-icon'><X size={22} aria-hidden='true' /></span>
+      </summary>
+      <nav aria-label='Mobile navigation'>
+        <a href='/#projects' data-section='projects'>Work</a>
+        <a href='/#skills' data-section='skills'>Expertise</a>
+        <a href='/#experience' data-section='experience'>Experience</a>
+        <a href='/#contact' data-section='contact'>Contact</a>
+      </nav>
+    </details>
+  </div>
 </header>
 
 <style>
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .site-header {
     position: sticky;
     top: 0;
-    z-index: 1;
-    min-height: 80px;
-    background-color: rgba(255, 255, 255, 0.07);
-    backdrop-filter: saturate(180%) blur(20px);
-    padding: 0px 24px;
+    z-index: 20;
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(13, 17, 16, 0.88);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 
-  nav {
+  .header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
     height: 100%;
+  }
 
-    & > a {
-      color: white;
-      font-size: 28px;
-      font-weight: 800;
-    }
+  .logo {
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 800;
   }
 
   .sign {
-    color: #2f9085;
+    color: var(--accent);
   }
 
-  ul {
+  .desktop-nav {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 40px;
-    font-size: 20px;
-
-    & li a {
-      color: rgba(255, 255, 255, 0.6);
-      &:hover {
-        color: white;
-      }
-    }
+    gap: 6px;
   }
 
-  @media (max-width: 640px) {
-    header {
-      min-height: 70px;
-      padding: 0px 16px;
+  .desktop-nav a {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 40px;
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current='location'] {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+  }
+
+  .desktop-nav .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-left: 6px;
+    background: var(--accent);
+    color: var(--background);
+    line-height: 1;
+  }
+
+  .desktop-nav .contact-link:hover,
+  .desktop-nav .contact-link[aria-current='location'] {
+    background: var(--text);
+    color: var(--background);
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  @media (max-width: 760px) {
+    .desktop-nav {
+      display: none;
     }
 
-    nav > a {
-      font-size: 22px;
+    .mobile-menu {
+      position: relative;
+      display: block;
     }
 
-    ul {
-      gap: 16px;
-      font-size: 15px;
+    summary {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 6px;
+      color: var(--text);
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary:hover {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .close-icon {
+      display: none;
+    }
+
+    details[open] .menu-icon {
+      display: none;
+    }
+
+    details[open] .close-icon {
+      display: block;
+    }
+
+    .mobile-menu nav {
+      position: absolute;
+      top: 52px;
+      right: 0;
+      display: flex;
+      width: 220px;
+      flex-direction: column;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-raised);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+    }
+
+    .mobile-menu nav a {
+      min-height: 44px;
+      padding: 0 12px;
+      border-radius: 6px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 44px;
+    }
+
+    .mobile-menu nav a:hover,
+    .mobile-menu nav a[aria-current='location'] {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
     }
   }
 </style>
+
+<script>
+  const mobileMenu = document.querySelector('.mobile-menu')
+  const sectionLinks = document.querySelectorAll<HTMLElement>('[data-section]')
+
+  mobileMenu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (mobileMenu instanceof HTMLDetailsElement) mobileMenu.open = false
+    })
+  })
+
+  mobileMenu?.addEventListener('toggle', () => {
+    const trigger = mobileMenu.querySelector('summary')
+    if (trigger && mobileMenu instanceof HTMLDetailsElement) {
+      trigger.setAttribute(
+        'aria-label',
+        mobileMenu.open ? 'Close navigation' : 'Open navigation'
+      )
+    }
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobileMenu instanceof HTMLDetailsElement) {
+      mobileMenu.open = false
+    }
+  })
+
+  const sections = [
+    ...document.querySelectorAll<HTMLElement>('main section[id]')
+  ]
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+
+      if (!visible) return
+
+      sectionLinks.forEach((link) => {
+        if (link.dataset.section === visible.target.id) {
+          link.setAttribute('aria-current', 'location')
+        } else {
+          link.removeAttribute('aria-current')
+        }
+      })
+    },
+    { rootMargin: '-20% 0px -65% 0px', threshold: [0, 0.25, 0.5] }
+  )
+
+  sections.forEach((section) => observer.observe(section))
+</script>

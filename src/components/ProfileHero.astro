@@ -1,153 +1,282 @@
 ---
 import { Picture } from 'astro:assets'
 import profileImage from '../images/profile.webp'
-import MailIcon from '../icons/MailIcon.astro'
 import LinkedInIcon from '../icons/LinkedInIcon.astro'
 import GithubIcon from '../icons/GithubIcon.astro'
+import { ArrowDown, Mail } from 'lucide-astro'
 ---
 
 <section class='hero'>
-  <section class='responsive-content'>
-    <section class='description'>
-      <p>
-        Hey, I'm Jesús <span style={{ color: 'white' }}>👋</span>
+  <div class='responsive-content hero-content'>
+    <div class='description'>
+      <p class='eyebrow'>Full-stack software engineer</p>
+      <h1>Jesús Zavala</h1>
+      <p class='positioning'>
+        I build reliable web products and scalable frontend systems.
       </p>
-      <h1>Fullstack Software Engineer</h1>
-      <p>
-        +12 years being completely dedicated and passionate about crafting solid
-        and scalable web products with amazing user interfaces.
+      <p class='intro'>
+        More than a decade turning product requirements into thoughtful,
+        maintainable experiences across the stack.
       </p>
-      <nav>
-        <a class='cta' href='mailto:jesus@zvl.dev'>
-          <MailIcon width={24} height={24} />
-           Send a message
+      <nav class='hero-actions' aria-label='Contact and portfolio links'>
+        <a class='primary-action' href='mailto:jesus@zvl.dev'>
+          <Mail size={19} aria-hidden='true' />
+           Email Jesús
+        </a>
+        <a class='secondary-action' href='#projects'>
+          View selected work
+          <ArrowDown size={18} aria-hidden='true' />
         </a>
         <div class='socials'>
           <a
+            class='social-link'
             href='https://github.com/jesuszvl'
             target='_blank'
             rel='noopener noreferrer'
             aria-label='See my code on GitHub'
+            title='GitHub'
           >
             <GithubIcon />
           </a>
           <a
+            class='social-link'
             href='https://www.linkedin.com/in/jesuszvl/'
             target='_blank'
             rel='noopener noreferrer'
             aria-label='Connect with me on LinkedIn'
+            title='LinkedIn'
           >
             <LinkedInIcon />
           </a>
         </div>
       </nav>
-    </section>
-    <Picture
-      src={profileImage}
-      alt='Jesús Zavala'
-      width={320}
-      height={320}
-      class='profile'
-      loading='eager'
-    />
-  </section>
+      <ul class='proof' aria-label='Engineering experience overview'>
+        <li><strong>12+ years</strong><span>shipping software</span></li>
+        <li><strong>Full stack</strong><span>product delivery</span></li>
+        <li><strong>Cross-functional</strong><span>collaboration</span></li>
+      </ul>
+    </div>
+    <div class='portrait'>
+      <Picture
+        src={profileImage}
+        alt='Portrait of Jesús Zavala'
+        width={360}
+        height={360}
+        class='profile'
+        loading='eager'
+      />
+    </div>
+  </div>
 </section>
 
 <style>
   .hero {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    padding: 48px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 88px 0 72px;
+    border-bottom: 1px solid var(--border);
   }
 
-  .responsive-content {
+  .hero-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    height: 100%;
-    gap: 32px;
+    gap: 72px;
   }
 
   .description {
-    display: flex;
-    flex-direction: column;
-    max-width: 640px;
-    min-width: 220px;
+    max-width: 700px;
   }
 
   h1 {
-    color: #2f9085;
-    margin-bottom: 16px;
+    margin-top: 14px;
   }
 
-  p {
-    margin-bottom: 24px;
+  .positioning {
+    max-width: 680px;
+    margin-top: 24px;
+    color: var(--text);
+    font-size: 34px;
+    font-weight: 580;
+    line-height: 1.15;
   }
 
-  .profile {
-    border-radius: 12px;
-    gap: 8px;
+  .intro {
+    max-width: 610px;
+    margin-top: 20px;
+    font-size: 19px;
+    line-height: 1.6;
   }
 
-  nav {
+  .hero-actions {
     display: flex;
     align-items: center;
-    gap: 24px;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+  }
+
+  .primary-action,
+  .secondary-action {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 18px;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: 700;
+    transition:
+      transform 150ms ease,
+      border-color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .primary-action {
+    background: var(--accent);
+    color: var(--background);
+  }
+
+  .secondary-action {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .primary-action:hover,
+  .secondary-action:hover {
+    transform: translateY(-2px);
+  }
+
+  .primary-action:hover {
+    background: var(--text);
+  }
+
+  .secondary-action:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.04);
   }
 
   .socials {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
   }
 
-  .cta {
-    background-color: #2f9085;
-    padding: 12px 24px;
-    border-radius: 12px;
-    font-size: 18px;
-    color: black;
-    font-weight: 700;
-    display: flex;
+  .social-link {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    border-radius: 6px;
+    color: var(--muted);
+  }
 
-    &:hover {
-      filter: drop-shadow(0 0 4px #2f9085);
-      color: white;
+  .social-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+  }
 
-      svg {
-        stroke: white;
-      }
+  .proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 28px;
+    margin-top: 34px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .proof li {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .proof strong {
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  .proof span {
+    color: var(--subtle);
+    font-size: 13px;
+  }
+
+  .portrait {
+    width: min(32vw, 360px);
+    min-width: 280px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+
+  .portrait :global(.profile) {
+    width: 100%;
+    height: auto;
+    filter: saturate(0.72) brightness(1.06) contrast(1.04);
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding: 42px 0 36px;
     }
 
-    &:active {
-      background-color: #256a62;
-      color: white;
+    .hero-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+    }
 
-      svg {
-        stroke: white;
-      }
+    h1 {
+      font-size: 56px;
+    }
+
+    .positioning {
+      margin-top: 18px;
+      font-size: 25px;
+    }
+
+    .intro {
+      margin-top: 14px;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      margin-top: 22px;
+    }
+
+    .proof {
+      gap: 14px 20px;
+      margin-top: 24px;
+      padding-top: 18px;
+    }
+
+    .portrait {
+      width: 180px;
+      min-width: 0;
+      align-self: flex-end;
     }
   }
 
-  @media (max-width: 640px) {
-    .responsive-content {
-      flex-direction: column;
-      justify-content: center;
+  @media (max-width: 760px) {
+    h1 {
+      font-size: 48px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .hero {
+      padding-top: 34px;
     }
 
-    .description {
-      text-align: center;
+    .primary-action,
+    .secondary-action {
+      padding: 0 13px;
+      font-size: 14px;
     }
 
-    nav {
-      justify-content: center;
+    .portrait {
+      width: 140px;
     }
   }
 </style>
