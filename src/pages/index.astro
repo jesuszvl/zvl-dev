@@ -2,46 +2,43 @@
 import { Image } from 'astro:assets'
 import Layout from '../layouts/Layout.astro'
 import profile from '../images/profile.webp'
-import vodyet from '../images/portfolio/vodyet.webp'
-import makahco from '../images/portfolio/makahco.webp'
+import nowildo from '../images/portfolio/nowildo.webp'
+import mexicalivip from '../images/portfolio/mexicalivip.webp'
 import preplibre from '../images/portfolio/preplibre.webp'
-import playlist from '../images/portfolio/playlist.webp'
+import vodyet from '../images/portfolio/vodyet.webp'
 
 const projects = [
   {
-    title: 'Vodyet',
-    tag: 'Personal finance · Live product',
+    title: 'NoWildo',
+    tag: 'Community platform · Live since 2024',
     description:
-      'A personal finance app for Spanish speakers that brings expenses, category budgets, credit and recurring payments into one calm workflow. I owned product, design, frontend and backend.',
-    image: vodyet,
-    links: [{ label: 'vodyet.com', href: 'https://vodyet.com' }]
+      'The site of a late-night Spanish-language Twitch channel: a film archive fed by TMDB, a daily guess-the-movie game, raffles, a site currency with its own slot machine, a 3D desert arcade and a poster bracket on a pannable map. Astro, Supabase and Twitch login, with much of the logic in Postgres.',
+    image: nowildo,
+    links: [{ label: 'nowildo.com', href: 'https://nowildo.com' }]
   },
   {
-    title: 'Makahco',
-    tag: 'Creative tool · Mobile-first',
+    title: 'mexicali.vip',
+    tag: 'Small business · Storefront',
     description:
-      'A practice partner for freestyle rappers and writers: rhyme endings, visual prompts and timed modes, designed for fast sessions with zero friction between you and the next word.',
-    image: makahco,
-    links: []
+      "A storefront for a maker of handmade party centerpieces in Mexicali. Designs are browsed by the birthday kid's age, every piece gets its own indexable, shareable page, several can be viewed in 3D and placed on your own table in AR, and orders go straight to WhatsApp. Next.js.",
+    image: mexicalivip,
+    links: [{ label: 'mexicali.vip', href: 'https://mexicali.vip' }]
   },
   {
     title: 'PREP Libre',
-    tag: 'Civic tech · Elections',
+    tag: 'Civic tech · Open source',
     description:
-      'An open platform for capturing and publishing preliminary election results, shaped by my years running electoral systems at IEEBC. Transparency and auditability come first.',
+      "An open-source Preliminary Electoral Results Program for Mexico's local electoral bodies, built on the INE's Anexo 13 rules: a Postgres schema derived from the official formats, Baja California's districting seeded from INE data, SQL-level tests and a public demo. In design and architecture, shaped by my years at IEEBC.",
     image: preplibre,
-    links: []
+    links: [{ label: 'preplibre.vercel.app', href: 'https://preplibre.vercel.app' }]
   },
   {
-    title: 'VS My Playlist',
-    tag: 'Music · Open source',
+    title: 'Vodyet',
+    tag: 'Personal finance · PWA',
     description:
-      'A React tool that turns reordering a Spotify playlist into quick head-to-head picks with audio previews, so you sort by taste instead of by drag and drop.',
-    image: playlist,
-    links: [
-      { label: 'Live', href: 'https://jesuszvl.github.io/vs-my-playlist' },
-      { label: 'Code', href: 'https://github.com/jesuszvl/vs-my-playlist' }
-    ]
+      "A Spanish-language expense tracker: monthly budgets by category, credit balances, recurring payments and a spending trend chart, behind Google sign-in with row-level security so every record stays the user's own. React, Vite and Supabase, installable as a PWA.",
+    image: vodyet,
+    links: [{ label: 'vodyet.com', href: 'https://vodyet.com' }]
   }
 ]
 
@@ -145,7 +142,7 @@ const toolbox = [
                 )}
               </div>
               <div class='shot'>
-                <Image src={p.image} alt={`${p.title} screens`} width={720} />
+                <Image src={p.image} alt={`${p.title} homepage`} width={1200} />
               </div>
             </li>
           ))
@@ -400,23 +397,23 @@ const toolbox = [
   }
 
   .shot {
-    display: grid;
-    place-items: center;
     aspect-ratio: 4 / 3;
-    padding: clamp(1rem, 3vw, 2rem);
+    overflow: hidden;
+    border: 1px solid var(--line);
     border-radius: 20px;
     background: var(--paper-2);
   }
 
   .shot img {
-    max-height: 100%;
-    width: auto;
-    object-fit: contain;
-    transition: transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 500ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   .project:hover .shot img {
-    transform: translateY(-6px);
+    transform: scale(1.02);
   }
 
   /* Experience */
