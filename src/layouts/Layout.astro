@@ -1,35 +1,50 @@
 ---
-import '@fontsource-variable/outfit'
-import Header from '../components/Header.astro'
-import Footer from '../components/Footer.astro'
-
+import '@fontsource/instrument-serif/400.css'
+import '@fontsource/instrument-serif/400-italic.css'
+import '@fontsource-variable/geist'
 import PostHog from '../components/Posthog.astro'
 
-interface Props {
-  title: string
-  description?: string
-}
-
-const {
-  title,
-  description = 'Full-stack software engineer building reliable web products, scalable frontend systems, and thoughtful user experiences.'
-} = Astro.props
+const title = 'Jesús Zavala · Product Engineer'
+const description =
+  'Product engineer building web products end to end since 2010. Software Engineer at Gametime, working remotely from Mexicali, México, on Pacific Time.'
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const ogImageURL = new URL('/og.jpg', Astro.site)
+
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jesús Zavala',
+  url: canonicalURL.href,
+  image: ogImageURL.href,
+  jobTitle: 'Software Engineer',
+  description,
+  email: 'mailto:jesus@zvl.dev',
+  worksFor: { '@type': 'Organization', name: 'Gametime' },
+  alumniOf: { '@type': 'EducationalOrganization', name: 'CETYS Universidad' },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Mexicali',
+    addressRegion: 'Baja California',
+    addressCountry: 'MX'
+  },
+  knowsLanguage: ['es', 'en'],
+  sameAs: ['https://github.com/jesuszvl', 'https://www.linkedin.com/in/jesuszvl/']
+}
 ---
 
 <!doctype html>
 <html lang='en'>
   <head>
     <meta charset='UTF-8' />
-    <meta name='description' content={description} />
     <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <title>{title}</title>
+    <meta name='description' content={description} />
+    <link rel='canonical' href={canonicalURL} />
     <link rel='icon' type='image/x-icon' href='/favicon.ico' />
     <link rel='apple-touch-icon' href='/apple-touch-icon.png' />
     <meta name='generator' content={Astro.generator} />
-    <title>{title}</title>
-    <link rel='canonical' href={canonicalURL} />
+    <meta name='theme-color' content='#f6f3ec' />
     <meta property='og:type' content='website' />
     <meta property='og:url' content={canonicalURL} />
     <meta property='og:title' content={title} />
@@ -37,185 +52,259 @@ const ogImageURL = new URL('/og.jpg', Astro.site)
     <meta property='og:image' content={ogImageURL} />
     <meta property='og:image:width' content='640' />
     <meta property='og:image:height' content='640' />
-    <meta property='og:site_name' content='zvl.dev' />
+    <meta property='og:site_name' content={canonicalURL.host} />
     <meta name='twitter:card' content='summary' />
     <meta name='twitter:title' content={title} />
     <meta name='twitter:description' content={description} />
     <meta name='twitter:image' content={ogImageURL} />
+    <script type='application/ld+json' is:inline set:html={JSON.stringify(person)} />
     <PostHog />
   </head>
   <body>
-    <a class='skip-link' href='#main-content'>Skip to content</a>
-    <Header />
-    <main id='main-content'>
+    <a class='skip-link' href='#main'>Skip to content</a>
+    <header class='top wrap'>
+      <a href='/' class='wordmark'>Jesús Zavala</a>
+      <nav aria-label='Primary'>
+        <a href='#work'>Work</a>
+        <a href='#experience'>Experience</a>
+        <a href='#about'>About</a>
+        <a href='mailto:jesus@zvl.dev'>Email</a>
+      </nav>
+    </header>
+    <main id='main'>
       <slot />
     </main>
-    <Footer />
+    <footer>
+      <div class='wrap'>
+        <p>© {new Date().getFullYear()} Jesús Zavala</p>
+        <p>Mexicali, México · <span data-clock>Pacific Time</span></p>
+      </div>
+    </footer>
+
+    <script>
+      const clocks = document.querySelectorAll('[data-clock]')
+      const fmt = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZone: 'America/Tijuana',
+        timeZoneName: 'short'
+      })
+      const tick = () => {
+        const now = fmt.format(new Date())
+        clocks.forEach((el) => (el.textContent = now))
+      }
+      tick()
+      setInterval(tick, 30_000)
+    </script>
+
     <style is:global>
       :root {
-        color-scheme: dark;
-        --background: #0d1110;
-        --surface: #151a18;
-        --surface-raised: #1a211f;
-        --text: #f2f5f3;
-        --muted: #a7b1ad;
-        --subtle: #7f8a86;
-        --accent: #58c4b3;
-        --border: rgba(255, 255, 255, 0.12);
-        --content-width: 1120px;
+        --paper: #f6f3ec;
+        --paper-2: #ece8dd;
+        --ink: #17150f;
+        --ink-2: #454037;
+        --muted: #6a655a;
+        --line: #dcd6c8;
+        --accent: #b93a0b;
+        --serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+        --sans: 'Geist Variable', system-ui, -apple-system, sans-serif;
+        --w: 1080px;
       }
 
-      *,
-      *::before,
-      *::after {
+      * {
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        min-height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: var(--background);
-        color: var(--muted);
-        font-family: 'Outfit Variable', sans-serif;
-        -webkit-font-smoothing: antialiased;
-      }
-
       html {
+        background: var(--paper);
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
       }
 
       body {
-        overflow-x: clip;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: none;
-      }
-
-      button {
-        border: 0;
-        padding: 0;
-        background: none;
-        color: inherit;
-        font: inherit;
-      }
-
-      a,
-      button,
-      summary {
-        cursor: pointer;
-      }
-
-      a:focus-visible,
-      button:focus-visible,
-      summary:focus-visible {
-        outline: 2px solid var(--accent);
-        outline-offset: 3px;
-        border-radius: 4px;
-      }
-
-      main {
-        display: block;
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink-2);
+        font: 400 17px/1.6 var(--sans);
+        -webkit-font-smoothing: antialiased;
       }
 
       h1,
       h2,
-      h3,
-      h4 {
+      h3 {
         margin: 0;
-        color: var(--text);
-        letter-spacing: 0;
+        color: var(--ink);
+        font-family: var(--serif);
+        font-weight: 400;
+        letter-spacing: -0.015em;
       }
 
       h1 {
-        font-size: 72px;
-        line-height: 0.95;
-        font-weight: 760;
+        font-size: clamp(2.75rem, 6.5vw, 5.25rem);
+        line-height: 1;
       }
 
       h2 {
-        font-size: 44px;
-        line-height: 1.05;
+        max-width: 24ch;
+        font-size: clamp(2rem, 3.8vw, 2.875rem);
+        line-height: 1.1;
       }
 
       h3 {
-        font-size: 28px;
+        font-size: 1.875rem;
         line-height: 1.15;
       }
 
-      p {
+      p,
+      ul,
+      ol,
+      dl,
+      dd {
         margin: 0;
+        padding: 0;
       }
 
       ul,
       ol {
         list-style: none;
-        padding: 0;
-        margin: 0;
       }
 
       img {
         display: block;
         max-width: 100%;
+        height: auto;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-color: var(--line);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 0.2em;
+        transition: color 150ms ease, text-decoration-color 150ms ease;
+      }
+
+      a:hover {
+        text-decoration-color: currentColor;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 2px;
+      }
+
+      ::selection {
+        background: var(--ink);
+        color: var(--paper);
       }
 
       [id] {
-        scroll-margin-top: 88px;
+        scroll-margin-top: 1.5rem;
       }
 
-      .responsive-content {
-        width: min(calc(100% - 48px), var(--content-width));
+      .wrap {
+        width: min(100% - 2.5rem, var(--w));
         margin-inline: auto;
       }
 
-      .eyebrow {
-        color: var(--accent);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-          monospace;
-        font-size: 13px;
-        font-weight: 700;
-        letter-spacing: 0;
+      .kicker {
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
+      }
+
+      .kicker + h2 {
+        margin-top: 1rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        min-height: 48px;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0 1.375rem;
+        border-radius: 999px;
+        background: var(--ink);
+        color: var(--paper);
+        font-weight: 500;
+        text-decoration: none;
+        transition: background-color 150ms ease;
+      }
+
+      .btn:hover {
+        background: var(--accent);
+      }
+
+      section {
+        padding-block: clamp(4.5rem, 9vw, 8rem);
+        border-top: 1px solid var(--line);
+      }
+
+      section > .wrap > header {
+        margin-bottom: clamp(2.5rem, 5vw, 4rem);
+      }
+
+      .top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem 1.5rem;
+        padding-block: 1.375rem;
+      }
+
+      .wordmark {
+        color: var(--ink);
+        font-family: var(--serif);
+        font-size: 1.375rem;
+        text-decoration: none;
+      }
+
+      .top nav {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.9375rem;
+        font-weight: 500;
+      }
+
+      .top nav a {
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      .top nav a:hover {
+        color: var(--ink);
+      }
+
+      footer .wrap {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem 1.5rem;
+        padding-block: 2rem;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.875rem;
       }
 
       .skip-link {
         position: fixed;
-        top: 12px;
-        left: 12px;
-        z-index: 100;
-        padding: 10px 14px;
+        top: 0.75rem;
+        left: 0.75rem;
+        z-index: 10;
+        padding: 0.625rem 0.875rem;
         border-radius: 6px;
-        background: var(--text);
-        color: var(--background);
-        font-weight: 700;
-        transform: translateY(-160%);
+        background: var(--ink);
+        color: var(--paper);
+        font-weight: 500;
+        text-decoration: none;
+        transform: translateY(-200%);
       }
 
       .skip-link:focus {
-        transform: translateY(0);
-      }
-
-      ::selection {
-        background: var(--accent);
-        color: var(--background);
-      }
-
-      @media (max-width: 760px) {
-        h1 {
-          font-size: 48px;
-        }
-
-        h2 {
-          font-size: 36px;
-        }
-
-        .responsive-content {
-          width: min(calc(100% - 32px), var(--content-width));
-        }
+        transform: none;
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -226,10 +315,8 @@ const ogImageURL = new URL('/og.jpg', Astro.site)
         *,
         *::before,
         *::after {
-          scroll-behavior: auto !important;
-          transition-duration: 0.01ms !important;
-          animation-duration: 0.01ms !important;
-          animation-iteration-count: 1 !important;
+          animation: none !important;
+          transition: none !important;
         }
       }
     </style>

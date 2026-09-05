@@ -4,4 +4,4 @@ This was developed with Astro as a portfolio page for my software engineer proje
 
 # Demo
 
-[zvl.dev](https://zvl.dev/)
+[jesuszavala.dev](https://jesuszavala.dev/)
