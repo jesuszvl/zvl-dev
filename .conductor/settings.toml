@@ -4,8 +4,15 @@
 setup = "npm ci"
 run_mode = "concurrent"
 
-[scripts.run.dev]
+# Args must go through each workspace's own `astro` script: `npm run dev:site --
+# --port N` appends the flag to the outer npm command, so astro never sees it.
+[scripts.run.site]
 available_in = [ "local" ]
-command = "npm run dev -- --port $CONDUCTOR_PORT"
+command = "npm run astro --workspace @jesuszavala/site -- dev --port $CONDUCTOR_PORT"
 default = true
 icon = "play"
+
+[scripts.run.admin]
+available_in = [ "local" ]
+command = "npm run astro --workspace @jesuszavala/admin -- dev --port $((CONDUCTOR_PORT + 1))"
+icon = "shield"
