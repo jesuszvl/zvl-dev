@@ -1,0 +1,29 @@
+---
+import '../../styles/admin.css'
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex, nofollow' />
+    <title>Confirm Sign In | Jesús Zavala Admin</title>
+  </head>
+  <body class='auth-body'>
+    <main class='auth-shell'>
+      <section class='auth-card compact' aria-labelledby='confirm-title'>
+        <span class='monogram' aria-hidden='true'>jz</span>
+        <h1 id='confirm-title'>Finishing sign in</h1>
+        <p data-confirm-status class='status-copy' role='status'>
+          Checking the email session.
+        </p>
+        <a class='text-link' href='/'>Open dashboard</a>
+      </section>
+    </main>
+
+    <script>
+      import '../../scripts/auth-confirm'
+    </script>
+  </body>
+</html>

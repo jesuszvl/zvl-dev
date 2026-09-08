@@ -1,0 +1,16 @@
+{
+  "name": "@jesuszavala/admin",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1 --port 4322",
+    "build": "astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 4323",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.116.0",
+    "astro": "^7.3.1"
+  }
+}

@@ -1,21 +1,22 @@
 {
-  "name": "jesuszavala-dev",
+  "name": "jesuszavala.dev",
   "type": "module",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^7.3.1"
-  },
-  "allowScripts": {
-    "esbuild": true
+    "dev": "npm run dev:site",
+    "dev:site": "npm run dev --workspace @jesuszavala/site",
+    "dev:admin": "npm run dev --workspace @jesuszavala/admin",
+    "build": "npm run build --workspaces --if-present",
+    "build:site": "npm run build --workspace @jesuszavala/site",
+    "build:admin": "npm run build --workspace @jesuszavala/admin",
+    "preview:site": "npm run preview --workspace @jesuszavala/site",
+    "preview:admin": "npm run preview --workspace @jesuszavala/admin"
   }
 }
