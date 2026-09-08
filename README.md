@@ -25,7 +25,7 @@ The admin app reads Supabase browser env vars from `apps/admin/.env` in local
 development:
 
 ```sh
-PUBLIC_SUPABASE_URL=https://xinydijbceyopouscxoc.supabase.co
+PUBLIC_SUPABASE_URL=https://eeltmgmeuxnajoggevct.supabase.co
 PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 ```
 
@@ -45,6 +45,22 @@ Adding a project: drop a `.webp` in `apps/site/src/images/portfolio/`, add an
 entry to `projects` in `apps/site/src/data/portfolio.ts` with its audience, your
 contribution, stack, and actual status, and give its `theme` a tint in
 `Work.astro`. Keep prototypes and demos clearly labeled.
+
+## Replacing the hero portrait
+
+The admin at `admin.jesuszavala.dev` keeps the reference photos and publishes
+the result, but the image itself is generated in ChatGPT.
+
+1. Upload reference photos to the library, then select the ones to use.
+2. Pick background, outfit, framing and lighting, and copy the prompt.
+3. Open the selected references, and give them to ChatGPT with that prompt.
+4. Upload what ChatGPT returns under "Add result".
+5. Press Publish. `publish-portrait` writes it to
+   `portfolio-public/portrait/current.png` and triggers the site deploy hook.
+
+`apps/site/src/lib/portrait.ts` reads that path at build time and falls back to
+the committed PNG whenever it is missing, so the site never depends on Supabase
+being reachable.
 
 Navigation and expandable details work without JavaScript. Scripts add the
 local clock, the current-section indicator, and the copy-email button.

@@ -3,6 +3,7 @@ import { defineConfig, fontProviders } from 'astro/config'
 
 export default defineConfig({
   site: 'https://jesuszavala.dev',
+  image: { domains: ['eeltmgmeuxnajoggevct.supabase.co'] },
   fonts: [
     {
       provider: fontProviders.fontsource(),

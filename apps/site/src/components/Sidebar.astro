@@ -11,7 +11,10 @@ const navigation = [
 
 <header class='sidebar'>
   <a href='#intro' class='identity' aria-label='Jesús Zavala, back to introduction'>
-    <span class='monogram' aria-hidden='true'>jz<span>.</span></span>
+    <svg class='monogram' viewBox='4 15 92 70' fill='none' aria-hidden='true'>
+      <path d='M11 78A21 21 0 0 0 32 57V22H86L40 78H74' stroke='currentColor' stroke-width='14' />
+      <rect x='82' y='71' width='14' height='14' fill='var(--accent)' />
+    </svg>
     <span class='identity-text'>
       <strong>Jesús Zavala</strong>
       <span>Software & product engineer</span>
@@ -40,7 +43,6 @@ const navigation = [
         LinkedIn <Icon name='arrow-up-right' size={15} />
       </a>
     </p>
-    <p class='sidebar-note'>Made with care.<br />From Mexicali, México.</p>
   </div>
 </header>
 
@@ -95,20 +97,9 @@ const navigation = [
     color: var(--ink);
   }
   .monogram {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    padding-bottom: 4px;
-    border-radius: 13px;
-    background: var(--accent);
-    color: #fff;
-    font: 600 33px/1 var(--font-display);
-    letter-spacing: -0.12em;
-  }
-  .monogram span {
-    color: #bac6ff;
+    height: 42px;
+    width: auto;
+    color: var(--ink);
   }
   .identity-text {
     display: flex;
@@ -187,12 +178,6 @@ const navigation = [
     gap: 3px;
     font-size: 11px;
   }
-  .sidebar-note {
-    margin-top: 24px;
-    color: var(--muted);
-    font-size: 10px;
-    line-height: 1.8;
-  }
 
   @media (max-width: 900px) {
     .sidebar {
@@ -211,10 +196,7 @@ const navigation = [
       width: fit-content;
     }
     .monogram {
-      width: 37px;
-      height: 37px;
-      border-radius: 10px;
-      font-size: 28px;
+      height: 32px;
     }
     .identity-text {
       margin-top: 0;

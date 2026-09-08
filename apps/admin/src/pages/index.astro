@@ -22,7 +22,10 @@ import '../styles/admin.css'
     <main class='admin-shell'>
       <section class='auth-shell' data-auth-panel>
         <div class='auth-card' aria-labelledby='login-title'>
-          <span class='monogram' aria-hidden='true'>jz</span>
+          <svg class='monogram' viewBox='4 15 92 70' fill='none' aria-hidden='true'>
+            <path d='M11 78A21 21 0 0 0 32 57V22H86L40 78H74' stroke='currentColor' stroke-width='14' />
+            <rect x='82' y='71' width='14' height='14' fill='var(--accent)' />
+          </svg>
           <h1 id='login-title'>Portfolio Admin</h1>
           <p class='admin-subtitle'>Sign in to manage jesuszavala.dev</p>
           <form class='login-form' data-login-form>
@@ -91,53 +94,112 @@ import '../styles/admin.css'
             </div>
           </section>
 
-          <section class='panel' aria-labelledby='reference-title'>
+          <section class='panel span-2' aria-labelledby='reference-title'>
             <div class='panel-header'>
               <div>
                 <h2 id='reference-title'>Reference library</h2>
+                <p class='admin-subtitle'>Photos the model uses to keep your likeness.</p>
               </div>
+              <span class='count' data-reference-count></span>
             </div>
-            <form class='stack-form' data-upload-form>
-              <label for='portrait-reference'>Reference image</label>
+            <form class='inline-form' data-upload-form>
               <input
                 id='portrait-reference'
                 name='file'
                 type='file'
                 accept='image/png,image/jpeg,image/webp'
+                multiple
                 required
               />
-              <label for='reference-alt'>Alt text</label>
-              <input
-                id='reference-alt'
-                name='altText'
-                type='text'
-                placeholder='Portrait reference'
-              />
-              <button type='submit'>Upload reference</button>
+              <button type='submit'>Add photos</button>
             </form>
-            <ul class='asset-list' data-asset-list>
-              <li>No assets loaded.</li>
-            </ul>
+            <div class='thumb-grid' data-asset-grid>
+              <p class='empty'>No reference photos yet.</p>
+            </div>
           </section>
 
           <section class='panel' aria-labelledby='generation-title'>
             <div class='panel-header'>
               <div>
-                <h2 id='generation-title'>Portrait drafts</h2>
+                <h2 id='generation-title'>Portrait prompt</h2>
+                <p class='admin-subtitle'>Build it here, generate in ChatGPT.</p>
               </div>
             </div>
             <form class='stack-form' data-generation-form>
-              <label for='generation-prompt'>Prompt</label>
+              <div class='control-grid'>
+                <div>
+                  <label for='background'>Background</label>
+                  <select id='background' name='background'>
+                    <option value='transparent'>Transparent</option>
+                    <option value='studio'>Studio grey</option>
+                    <option value='solid'>Solid off-white</option>
+                    <option value='office'>Blurred office</option>
+                  </select>
+                </div>
+                <div>
+                  <label for='outfit'>Outfit</label>
+                  <select id='outfit' name='outfit'>
+                    <option value='tee'>Plain black t-shirt</option>
+                    <option value='shirt'>Button-down shirt</option>
+                    <option value='hoodie'>Dark hoodie</option>
+                    <option value='jacket'>Casual jacket</option>
+                  </select>
+                </div>
+                <div>
+                  <label for='framing'>Framing &amp; pose</label>
+                  <select id='framing' name='framing'>
+                    <option value='standing'>Standing, three-quarter</option>
+                    <option value='half'>Half body, forward</option>
+                    <option value='head'>Head and shoulders</option>
+                  </select>
+                </div>
+                <div>
+                  <label for='lighting'>Lighting &amp; mood</label>
+                  <select id='lighting' name='lighting'>
+                    <option value='studio'>Natural studio</option>
+                    <option value='window'>Soft window</option>
+                    <option value='dramatic'>Dramatic</option>
+                    <option value='editorial'>Flat editorial</option>
+                  </select>
+                </div>
+              </div>
+              <label for='generation-notes'>Extra notes <span class='optional'>optional</span></label>
               <textarea
-                id='generation-prompt'
-                name='prompt'
-                rows='7'
-              >Standing portfolio portrait of Jesus Zavala, short hair, plain black t-shirt, transparent background, natural studio lighting.</textarea>
-              <button type='submit'>Save generation draft</button>
+                id='generation-notes'
+                name='notes'
+                rows='2'
+                placeholder='Anything else to steer the result.'
+              ></textarea>
+              <label for='prompt-preview'>Prompt</label>
+              <textarea id='prompt-preview' data-prompt-preview rows='6' readonly></textarea>
+              <button type='submit'>Copy prompt</button>
             </form>
-            <ul class='asset-list' data-generation-list>
-              <li>No generation drafts loaded.</li>
-            </ul>
+            <p class='hint'>
+              Paste it into ChatGPT with the selected reference photos, then
+              upload the result below.
+            </p>
+            <form class='inline-form' data-result-form>
+              <input
+                id='portrait-result'
+                name='file'
+                type='file'
+                accept='image/png,image/jpeg,image/webp'
+                required
+              />
+              <button type='submit'>Add result</button>
+            </form>
+          </section>
+
+          <section class='panel' aria-labelledby='results-title'>
+            <div class='panel-header'>
+              <div>
+                <h2 id='results-title'>Generated portraits</h2>
+                <p class='admin-subtitle'>Publishing replaces the hero image.</p>
+              </div>
+            </div>
+            <div class='thumb-grid' data-generation-grid>
+              <p class='empty'>Nothing generated yet.</p>
+            </div>
           </section>
         </div>
 

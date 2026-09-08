@@ -6,22 +6,6 @@ import vodyet from '../images/portfolio/vodyet.webp'
 // Based on the existing portfolio; keep contribution and project status explicit.
 export const projects = [
   {
-    name: 'NoWildo',
-    category: 'Community & entertainment',
-    headline: 'A community that lives beyond the stream.',
-    description:
-      'A home for a Spanish-speaking Twitch community, with a film archive, daily movie games, raffles, and a 3D arcade.',
-    contribution: 'Product development, Twitch sign-in, and database logic.',
-    stack: ['Astro', 'Supabase', 'Postgres'],
-    status: 'Live since 2024',
-    image: nowildo,
-    imageAlt:
-      'NoWildo website with a late-night entertainment headline and green illustrated mascot',
-    url: 'https://nowildo.com',
-    domain: 'nowildo.com',
-    theme: 'nowildo'
-  },
-  {
     name: 'mexicali.vip',
     category: 'Commerce & small business',
     headline: 'Handmade products. A more useful storefront.',
@@ -69,6 +53,22 @@ export const projects = [
     url: 'https://vodyet.com',
     domain: 'vodyet.com',
     theme: 'vodyet'
+  },
+  {
+    name: 'NoWildo',
+    category: 'Community & entertainment',
+    headline: 'A community that lives beyond the stream.',
+    description:
+      'A home for a Spanish-speaking Twitch community, with a film archive, daily movie games, raffles, and a 3D arcade.',
+    contribution: 'Product development, Twitch sign-in, and database logic.',
+    stack: ['Astro', 'Supabase', 'Postgres'],
+    status: 'Live since 2024',
+    image: nowildo,
+    imageAlt:
+      'NoWildo website with a late-night entertainment headline and green illustrated mascot',
+    url: 'https://nowildo.com',
+    domain: 'nowildo.com',
+    theme: 'nowildo'
   }
 ]
 

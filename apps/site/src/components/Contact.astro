@@ -14,7 +14,7 @@ import Icon from './Icon.astro'
   </p>
   <div class='bottom'>
     <div class='email'>
-      <a href='mailto:jesus@zvl.dev'>jesus@zvl.dev</a>
+      <a href='mailto:hi@jesuszavala.dev'>hi@jesuszavala.dev</a>
       <button type='button' aria-label='Copy email address' title='Copy email address' data-copy hidden>
         <Icon name='copy' size={18} />
       </button>
@@ -40,7 +40,7 @@ import Icon from './Icon.astro'
     button.addEventListener('click', async () => {
       clearTimeout(reset)
       try {
-        await navigator.clipboard.writeText('jesus@zvl.dev')
+        await navigator.clipboard.writeText('hi@jesuszavala.dev')
         status.textContent = 'Copied!'
         button.setAttribute('aria-label', 'Email address copied')
       } catch {
