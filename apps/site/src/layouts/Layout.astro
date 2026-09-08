@@ -3,7 +3,7 @@ import { Font } from 'astro:assets'
 import Icon from '../components/Icon.astro'
 import PostHog from '../components/Posthog.astro'
 import Sidebar from '../components/Sidebar.astro'
-import portrait from '../images/portrait-standing-transparent.png'
+import { portrait } from '../lib/portrait'
 import '../styles/global.css'
 
 const title = 'Jesús Zavala — Software & Product Engineer'
@@ -16,7 +16,8 @@ const person = {
   '@type': 'Person',
   name: 'Jesús Zavala',
   url: canonicalURL.href,
-  image: new URL(portrait.src, Astro.site).href,
+  image:
+    typeof portrait === 'string' ? portrait : new URL(portrait.src, Astro.site).href,
   jobTitle: 'Software Engineer',
   description,
   email: 'mailto:jesus@zvl.dev',

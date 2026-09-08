@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import Icon from './Icon.astro'
-import portrait from '../images/portrait-standing-transparent.png'
+import { portrait, portraitAlt } from '../lib/portrait'
 ---
 
 <section class='intro' id='intro' aria-labelledby='intro-title'>
@@ -33,7 +33,7 @@ import portrait from '../images/portrait-standing-transparent.png'
       <div class='portrait-image'>
         <Image
           src={portrait}
-          alt='Studio portrait of Jesús Zavala'
+          alt={portraitAlt}
           widths={[360, 540, 720]}
           sizes='(max-width: 600px) 90vw, (max-width: 900px) 35vw, 30vw'
           width={540}

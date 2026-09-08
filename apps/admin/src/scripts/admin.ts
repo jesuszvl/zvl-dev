@@ -27,6 +27,7 @@ type PortraitGeneration = {
   status: string
   prompt: string
   created_at: string | null
+  portfolio_assets: { object_path: string } | null
 }
 
 const authPanel = document.querySelector<HTMLElement>('[data-auth-panel]')
@@ -39,10 +40,9 @@ const updatedAt = document.querySelector<HTMLElement>('[data-updated-at]')
 const contentList = document.querySelector<HTMLTableSectionElement>(
   '[data-content-list]'
 )
-const assetList = document.querySelector<HTMLUListElement>('[data-asset-list]')
-const generationList = document.querySelector<HTMLUListElement>(
-  '[data-generation-list]'
-)
+const assetGrid = document.querySelector<HTMLElement>('[data-asset-grid]')
+const generationGrid = document.querySelector<HTMLElement>('[data-generation-grid]')
+const referenceCount = document.querySelector<HTMLElement>('[data-reference-count]')
 const refreshButton = document.querySelector<HTMLButtonElement>('[data-refresh]')
 const signOutButton = document.querySelector<HTMLButtonElement>('[data-sign-out]')
 const createDraftButton =
@@ -52,8 +52,29 @@ const generationForm = document.querySelector<HTMLFormElement>(
   '[data-generation-form]'
 )
 
-const state: { user: User | null } = {
-  user: null
+const state: { user: User | null; selected: Set<string> } = {
+  user: null,
+  selected: new Set()
+}
+
+const BUCKET = 'portfolio-private'
+
+// One batch call keeps the grid to a single request instead of one per thumbnail.
+async function signedUrls(paths: string[]) {
+  const urls = new Map<string, string>()
+  if (!supabase || paths.length === 0) return urls
+  const { data } = await supabase.storage.from(BUCKET).createSignedUrls(paths, 3600)
+  data?.forEach((entry) => {
+    if (entry.signedUrl && entry.path) urls.set(entry.path, entry.signedUrl)
+  })
+  return urls
+}
+
+function emptyMessage(host: HTMLElement, message: string) {
+  const note = document.createElement('p')
+  note.className = 'empty'
+  note.textContent = message
+  host.append(note)
 }
 
 function setLoginStatus(message: string) {
@@ -118,48 +139,138 @@ function renderContentVersions(versions: ContentVersion[]) {
   })
 }
 
-function renderAssets(assets: PortfolioAsset[]) {
-  if (!assetList) return
-  assetList.textContent = ''
+async function renderAssets(assets: PortfolioAsset[]) {
+  if (!assetGrid) return
+  assetGrid.textContent = ''
+  if (referenceCount) {
+    referenceCount.textContent = `${assets.length} photo${assets.length === 1 ? '' : 's'}`
+  }
   if (assets.length === 0) {
-    const item = document.createElement('li')
-    item.textContent = 'No portrait references yet.'
-    assetList.append(item)
+    state.selected.clear()
+    emptyMessage(assetGrid, 'No reference photos yet.')
     return
   }
 
-  assets.forEach((asset) => {
-    const item = document.createElement('li')
-    const label = document.createElement('span')
-    const meta = document.createElement('small')
+  const urls = await signedUrls(assets.map((asset) => asset.object_path))
 
-    label.textContent = asset.alt_text ?? asset.object_path
-    meta.textContent = `${asset.kind} · ${asset.is_public ? 'public' : 'private'}`
-    item.append(label, meta)
-    assetList.append(item)
+  assets.forEach((asset) => {
+    const figure = document.createElement('label')
+    const checkbox = document.createElement('input')
+    const image = document.createElement('img')
+    const remove = document.createElement('button')
+
+    figure.className = 'thumb'
+    checkbox.type = 'checkbox'
+    checkbox.checked = state.selected.has(asset.id)
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) state.selected.add(asset.id)
+      else state.selected.delete(asset.id)
+      figure.classList.toggle('is-selected', checkbox.checked)
+    })
+
+    image.src = urls.get(asset.object_path) ?? ''
+    image.alt = asset.alt_text ?? 'Portrait reference'
+    image.loading = 'lazy'
+
+    remove.type = 'button'
+    remove.className = 'thumb-remove'
+    remove.textContent = 'Remove'
+    remove.addEventListener('click', (event) => {
+      event.preventDefault()
+      void deleteReference(asset)
+    })
+
+    figure.classList.toggle('is-selected', checkbox.checked)
+    figure.append(checkbox, image, remove)
+    assetGrid.append(figure)
   })
 }
 
-function renderGenerations(generations: PortraitGeneration[]) {
-  if (!generationList) return
-  generationList.textContent = ''
+async function renderGenerations(generations: PortraitGeneration[]) {
+  if (!generationGrid) return
+  generationGrid.textContent = ''
   if (generations.length === 0) {
-    const item = document.createElement('li')
-    item.textContent = 'No generation drafts yet.'
-    generationList.append(item)
+    emptyMessage(generationGrid, 'Nothing generated yet.')
     return
   }
 
-  generations.forEach((generation) => {
-    const item = document.createElement('li')
-    const prompt = document.createElement('span')
-    const meta = document.createElement('small')
+  const paths = generations
+    .map((generation) => generation.portfolio_assets?.object_path)
+    .filter((path): path is string => Boolean(path))
+  const urls = await signedUrls(paths)
 
-    prompt.textContent = generation.prompt
-    meta.textContent = `${generation.status} · ${formatDate(generation.created_at)}`
-    item.append(prompt, meta)
-    generationList.append(item)
+  generations.forEach((generation) => {
+    const figure = document.createElement('figure')
+    const image = document.createElement('img')
+    const caption = document.createElement('figcaption')
+    const publish = document.createElement('button')
+    const path = generation.portfolio_assets?.object_path
+
+    figure.className = 'thumb is-result'
+    image.src = path ? (urls.get(path) ?? '') : ''
+    image.alt = 'Generated portrait'
+    image.loading = 'lazy'
+
+    caption.textContent = `${generation.status} · ${formatDate(generation.created_at)}`
+    caption.title = generation.prompt
+
+    publish.type = 'button'
+    publish.className = 'thumb-publish'
+    publish.textContent = generation.status === 'approved' ? 'Live' : 'Publish'
+    publish.disabled = generation.status === 'approved'
+    publish.addEventListener('click', () => void publishGeneration(generation.id, publish))
+
+    figure.append(image, caption, publish)
+    generationGrid.append(figure)
   })
+}
+
+async function deleteReference(asset: PortfolioAsset) {
+  if (!supabase) return
+  setDashboardStatus('Removing photo.')
+
+  const { error: storageError } = await supabase.storage
+    .from(asset.bucket_id)
+    .remove([asset.object_path])
+  if (storageError) {
+    setDashboardStatus(storageError.message)
+    return
+  }
+
+  const { error } = await supabase.from('portfolio_assets').delete().eq('id', asset.id)
+  if (error) {
+    setDashboardStatus(error.message)
+    return
+  }
+
+  state.selected.delete(asset.id)
+  await loadDashboard()
+}
+
+// functions.invoke puts the body of a non-2xx response on error.context.
+async function callFunction(name: string, body: unknown) {
+  if (!supabase) throw new Error(supabaseConfigError ?? 'Supabase is not configured.')
+  const { data, error } = await supabase.functions.invoke(name, { body })
+  if (!error) return data
+  const detail = await error.context?.json().catch(() => null)
+  throw new Error(detail?.error ?? error.message)
+}
+
+async function publishGeneration(generationId: string, trigger: HTMLButtonElement) {
+  trigger.disabled = true
+  setDashboardStatus('Publishing to the site.')
+  try {
+    const result = await callFunction('publish-portrait', { generationId })
+    setDashboardStatus(
+      result?.rebuildTriggered
+        ? 'Published. The site is rebuilding.'
+        : 'Published. Redeploy the site to pick it up.'
+    )
+    await loadDashboard()
+  } catch (error) {
+    trigger.disabled = false
+    setDashboardStatus(error instanceof Error ? error.message : 'Publish failed.')
+  }
 }
 
 function safeFileName(name: string) {
@@ -199,12 +310,14 @@ async function loadDashboard() {
     supabase
       .from('portfolio_assets')
       .select('id,kind,bucket_id,object_path,public_url,alt_text,is_public,created_at')
-      .in('kind', ['portrait_reference', 'portrait_current', 'portrait_generation'])
+      .eq('kind', 'portrait_reference')
       .order('created_at', { ascending: false })
-      .limit(8),
+      .limit(60),
     supabase
       .from('portrait_generations')
-      .select('id,status,prompt,created_at')
+      .select(
+        'id,status,prompt,created_at,portfolio_assets!portrait_generations_output_asset_id_fkey(object_path)'
+      )
       .order('created_at', { ascending: false })
       .limit(8)
   ])
@@ -214,8 +327,8 @@ async function loadDashboard() {
   if (generationsResult.error) throw generationsResult.error
 
   renderContentVersions((contentResult.data ?? []) as ContentVersion[])
-  renderAssets((assetsResult.data ?? []) as PortfolioAsset[])
-  renderGenerations((generationsResult.data ?? []) as PortraitGeneration[])
+  await renderAssets((assetsResult.data ?? []) as PortfolioAsset[])
+  await renderGenerations((generationsResult.data ?? []) as PortraitGeneration[])
 
   if (updatedAt) updatedAt.textContent = `Updated ${formatDate(new Date().toISOString())}`
   setDashboardStatus('')
@@ -328,49 +441,43 @@ uploadForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
   if (!supabase || !state.user) return
 
-  const formData = new FormData(uploadForm)
-  const file = formData.get('file')
-  if (!(file instanceof File)) return
+  const files = new FormData(uploadForm).getAll('file').filter((f): f is File => f instanceof File)
+  if (files.length === 0) return
 
-  setDashboardStatus('Uploading portrait reference.')
-  const path = `portrait-references/${state.user.id}/${Date.now()}-${safeFileName(
-    file.name
-  )}`
+  for (const [index, file] of files.entries()) {
+    setDashboardStatus(`Uploading ${index + 1} of ${files.length}.`)
+    const path = `portrait-references/${state.user.id}/${Date.now()}-${safeFileName(file.name)}`
 
-  const { error: uploadError } = await supabase.storage
-    .from('portfolio-private')
-    .upload(path, file, {
-      cacheControl: '3600',
-      contentType: file.type,
-      upsert: false
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET)
+      .upload(path, file, { cacheControl: '3600', contentType: file.type, upsert: false })
+    if (uploadError) {
+      setDashboardStatus(uploadError.message)
+      return
+    }
+
+    const { error: assetError } = await supabase.from('portfolio_assets').insert({
+      kind: 'portrait_reference',
+      bucket_id: BUCKET,
+      object_path: path,
+      alt_text: file.name,
+      metadata: {
+        contentType: file.type,
+        fileName: file.name,
+        fileSize: file.size,
+        source: 'admin'
+      },
+      is_public: false,
+      created_by: state.user.id
     })
-
-  if (uploadError) {
-    setDashboardStatus(uploadError.message)
-    return
-  }
-
-  const { error: assetError } = await supabase.from('portfolio_assets').insert({
-    kind: 'portrait_reference',
-    bucket_id: 'portfolio-private',
-    object_path: path,
-    alt_text: String(formData.get('altText') ?? 'Portrait reference'),
-    metadata: {
-      contentType: file.type,
-      fileName: file.name,
-      fileSize: file.size,
-      source: 'admin'
-    },
-    is_public: false,
-    created_by: state.user.id
-  })
-
-  if (assetError) {
-    setDashboardStatus(assetError.message)
-    return
+    if (assetError) {
+      setDashboardStatus(assetError.message)
+      return
+    }
   }
 
   uploadForm.reset()
+  setDashboardStatus('')
   await loadDashboard()
 })
 
@@ -378,29 +485,34 @@ generationForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
   if (!supabase || !state.user) return
 
-  const formData = new FormData(generationForm)
-  const prompt = String(formData.get('prompt') ?? '').trim()
-  if (!prompt) return
-
-  setDashboardStatus('Saving generation draft.')
-  const { error } = await supabase.from('portrait_generations').insert({
-    status: 'draft',
-    prompt,
-    settings: {
-      background: 'transparent',
-      hair: 'short',
-      outfit: 'plain black t-shirt',
-      posture: 'standing'
-    },
-    created_by: state.user.id
-  })
-
-  if (error) {
-    setDashboardStatus(error.message)
+  if (state.selected.size === 0) {
+    setDashboardStatus('Select at least one reference photo first.')
     return
   }
 
-  await loadDashboard()
+  const formData = new FormData(generationForm)
+  const trigger = generationForm.querySelector<HTMLButtonElement>('[data-generate]')
+  if (trigger) trigger.disabled = true
+  setDashboardStatus('Generating. This usually takes under a minute.')
+
+  try {
+    await callFunction('generate-portrait', {
+      referenceAssetIds: [...state.selected],
+      settings: {
+        background: formData.get('background'),
+        outfit: formData.get('outfit'),
+        framing: formData.get('framing'),
+        lighting: formData.get('lighting')
+      },
+      notes: String(formData.get('notes') ?? '')
+    })
+    setDashboardStatus('')
+    await loadDashboard()
+  } catch (error) {
+    setDashboardStatus(error instanceof Error ? error.message : 'Generation failed.')
+  } finally {
+    if (trigger) trigger.disabled = false
+  }
 })
 
 supabase?.auth.onAuthStateChange((_event, session) => {
