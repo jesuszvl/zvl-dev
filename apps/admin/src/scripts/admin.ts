@@ -59,6 +59,58 @@ const state: { user: User | null; selected: Set<string> } = {
 
 const BUCKET = 'portfolio-private'
 
+// Option keys from the form -> the phrasing that goes into the prompt.
+const BACKGROUND: Record<string, string> = {
+  transparent: 'isolated on a fully transparent background',
+  studio: 'against a smooth neutral grey studio backdrop',
+  solid: 'against a flat solid off-white background',
+  office: 'in a softly blurred modern office interior'
+}
+const OUTFIT: Record<string, string> = {
+  tee: 'a plain black t-shirt',
+  shirt: 'a well-fitted button-down shirt',
+  hoodie: 'a simple dark hoodie',
+  jacket: 'a tailored casual jacket over a plain top'
+}
+const FRAMING: Record<string, string> = {
+  standing: 'Full-body standing shot, three-quarter turn toward the camera',
+  half: 'Half-body shot from the waist up, facing the camera',
+  head: 'Head and shoulders portrait, facing the camera'
+}
+const LIGHTING: Record<string, string> = {
+  studio: 'Natural studio lighting with soft shadows',
+  window: 'Soft directional window light',
+  dramatic: 'Dramatic high-contrast side lighting',
+  editorial: 'Flat even editorial lighting'
+}
+
+type Settings = Record<string, string>
+
+function readSettings(form: HTMLFormElement): Settings {
+  const data = new FormData(form)
+  return {
+    background: String(data.get('background') ?? 'transparent'),
+    outfit: String(data.get('outfit') ?? 'tee'),
+    framing: String(data.get('framing') ?? 'standing'),
+    lighting: String(data.get('lighting') ?? 'studio'),
+    notes: String(data.get('notes') ?? '')
+  }
+}
+
+function buildPrompt(settings: Settings) {
+  const parts = [
+    'Photorealistic portrait of the same person shown in the reference photographs.',
+    'Preserve their facial features, skin tone, facial hair and hairstyle exactly as they appear in the references.',
+    `${FRAMING[settings.framing] ?? FRAMING.standing}.`,
+    `Wearing ${OUTFIT[settings.outfit] ?? OUTFIT.tee}.`,
+    `${LIGHTING[settings.lighting] ?? LIGHTING.studio}.`,
+    `Subject ${BACKGROUND[settings.background] ?? BACKGROUND.transparent}.`,
+    'Sharp focus, natural colour, no text or watermarks.'
+  ]
+  if (settings.notes.trim()) parts.push(settings.notes.trim())
+  return parts.join(' ')
+}
+
 // One batch call keeps the grid to a single request instead of one per thumbnail.
 async function signedUrls(paths: string[]) {
   const urls = new Map<string, string>()
@@ -180,8 +232,21 @@ async function renderAssets(assets: PortfolioAsset[]) {
       void deleteReference(asset)
     })
 
+    // Opening the full photo is how you feed it to ChatGPT.
+    const open = document.createElement('a')
+    open.className = 'thumb-open'
+    open.href = urls.get(asset.object_path) ?? '#'
+    open.target = '_blank'
+    open.rel = 'noreferrer'
+    open.textContent = 'Open'
+    open.addEventListener('click', (event) => event.stopPropagation())
+
+    const actions = document.createElement('span')
+    actions.className = 'thumb-actions'
+    actions.append(open, remove)
+
     figure.classList.toggle('is-selected', checkbox.checked)
-    figure.append(checkbox, image, remove)
+    figure.append(checkbox, image, actions)
     assetGrid.append(figure)
   })
 }
@@ -481,38 +546,103 @@ uploadForm?.addEventListener('submit', async (event) => {
   await loadDashboard()
 })
 
+const promptPreview = document.querySelector<HTMLTextAreaElement>('[data-prompt-preview]')
+const resultForm = document.querySelector<HTMLFormElement>('[data-result-form]')
+
+function refreshPrompt() {
+  if (!generationForm || !promptPreview) return
+  promptPreview.value = buildPrompt(readSettings(generationForm))
+}
+
+generationForm?.addEventListener('input', refreshPrompt)
+refreshPrompt()
+
 generationForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
-  if (!supabase || !state.user) return
+  if (!promptPreview) return
+  try {
+    await navigator.clipboard.writeText(promptPreview.value)
+    setDashboardStatus('Prompt copied.')
+  } catch {
+    promptPreview.select()
+    setDashboardStatus('Press copy to take the selected prompt.')
+  }
+})
 
-  if (state.selected.size === 0) {
-    setDashboardStatus('Select at least one reference photo first.')
+// The image itself comes from ChatGPT; this records it and its references.
+resultForm?.addEventListener('submit', async (event) => {
+  event.preventDefault()
+  if (!supabase || !state.user || !generationForm) return
+
+  const file = new FormData(resultForm).get('file')
+  if (!(file instanceof File)) return
+
+  const settings = readSettings(generationForm)
+  const prompt = buildPrompt(settings)
+  setDashboardStatus('Uploading portrait.')
+
+  const path = `portrait-generations/${state.user.id}/${Date.now()}-${safeFileName(file.name)}`
+  const { error: uploadError } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false })
+  if (uploadError) {
+    setDashboardStatus(uploadError.message)
     return
   }
 
-  const formData = new FormData(generationForm)
-  const trigger = generationForm.querySelector<HTMLButtonElement>('[data-generate]')
-  if (trigger) trigger.disabled = true
-  setDashboardStatus('Generating. This usually takes under a minute.')
-
-  try {
-    await callFunction('generate-portrait', {
-      referenceAssetIds: [...state.selected],
-      settings: {
-        background: formData.get('background'),
-        outfit: formData.get('outfit'),
-        framing: formData.get('framing'),
-        lighting: formData.get('lighting')
-      },
-      notes: String(formData.get('notes') ?? '')
+  const { data: asset, error: assetError } = await supabase
+    .from('portfolio_assets')
+    .insert({
+      kind: 'portrait_generation',
+      bucket_id: BUCKET,
+      object_path: path,
+      alt_text: 'Generated portrait',
+      metadata: { contentType: file.type, fileName: file.name, source: 'chatgpt' },
+      is_public: false,
+      created_by: state.user.id
     })
-    setDashboardStatus('')
-    await loadDashboard()
-  } catch (error) {
-    setDashboardStatus(error instanceof Error ? error.message : 'Generation failed.')
-  } finally {
-    if (trigger) trigger.disabled = false
+    .select('id')
+    .single()
+  if (assetError) {
+    setDashboardStatus(assetError.message)
+    return
   }
+
+  const { data: generation, error: generationError } = await supabase
+    .from('portrait_generations')
+    .insert({
+      status: 'generated',
+      prompt,
+      settings,
+      output_asset_id: asset.id,
+      created_by: state.user.id
+    })
+    .select('id')
+    .single()
+  if (generationError) {
+    setDashboardStatus(generationError.message)
+    return
+  }
+
+  const links = [...state.selected].map((assetId) => ({
+    portrait_generation_id: generation.id,
+    asset_id: assetId,
+    role: 'identity'
+  }))
+  links.push({
+    portrait_generation_id: generation.id,
+    asset_id: asset.id,
+    role: 'result'
+  })
+  const { error: linkError } = await supabase.from('portrait_generation_assets').insert(links)
+  if (linkError) {
+    setDashboardStatus(linkError.message)
+    return
+  }
+
+  resultForm.reset()
+  setDashboardStatus('')
+  await loadDashboard()
 })
 
 supabase?.auth.onAuthStateChange((_event, session) => {

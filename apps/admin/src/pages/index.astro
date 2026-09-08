@@ -118,8 +118,8 @@ import '../styles/admin.css'
           <section class='panel' aria-labelledby='generation-title'>
             <div class='panel-header'>
               <div>
-                <h2 id='generation-title'>Generate portrait</h2>
-                <p class='admin-subtitle'>Uses the selected references.</p>
+                <h2 id='generation-title'>Portrait prompt</h2>
+                <p class='admin-subtitle'>Build it here, generate in ChatGPT.</p>
               </div>
             </div>
             <form class='stack-form' data-generation-form>
@@ -164,10 +164,26 @@ import '../styles/admin.css'
               <textarea
                 id='generation-notes'
                 name='notes'
-                rows='3'
+                rows='2'
                 placeholder='Anything else to steer the result.'
               ></textarea>
-              <button type='submit' data-generate>Generate portrait</button>
+              <label for='prompt-preview'>Prompt</label>
+              <textarea id='prompt-preview' data-prompt-preview rows='6' readonly></textarea>
+              <button type='submit'>Copy prompt</button>
+            </form>
+            <p class='hint'>
+              Paste it into ChatGPT with the selected reference photos, then
+              upload the result below.
+            </p>
+            <form class='inline-form' data-result-form>
+              <input
+                id='portrait-result'
+                name='file'
+                type='file'
+                accept='image/png,image/jpeg,image/webp'
+                required
+              />
+              <button type='submit'>Add result</button>
             </form>
           </section>
 

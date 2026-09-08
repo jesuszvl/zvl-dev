@@ -463,3 +463,32 @@ h2 {
     align-items: stretch;
   }
 }
+
+.hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 12px 0;
+}
+
+.thumb-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.thumb-open {
+  padding: 7px 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--ink);
+  background: var(--panel-soft);
+  text-decoration: none;
+}
+
+.thumb-open:hover {
+  text-decoration: underline;
+}
+
+textarea[readonly] {
+  background: var(--panel-soft);
+  color: var(--muted);
+}
