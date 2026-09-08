@@ -1,0 +1,255 @@
+---
+import Icon from './Icon.astro'
+import { experience, earlierExperience } from '../data/portfolio'
+---
+
+<section id='experience' class='section experience' aria-labelledby='experience-title'>
+  <div class='section-heading'>
+    <div>
+      <p class='eyebrow'>The work along the way</p>
+      <h2 id='experience-title'>Different teams.<br />The same care.</h2>
+    </div>
+    <p>From local business tools to election systems and a consumer marketplace.</p>
+  </div>
+  <div class='list'>
+    {
+      experience.map((job) => (
+        <article class='job'>
+          <div class:list={['company', { current: job.current }]} aria-hidden='true'>
+            {job.initial}
+          </div>
+          <div class='job-body'>
+            <div class='job-heading'>
+              <h3>
+                {job.company} {job.current && <span class='badge'>Current</span>}
+              </h3>
+              <p class='period'>{job.period}</p>
+            </div>
+            <p class='role'>{job.role}</p>
+            <p class='context'>{job.context}</p>
+            <p class='description'>{job.description}</p>
+            <ul class='tags'>
+              {job.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+    <details class='earlier'>
+      <summary>
+        <span>Earlier chapters <span class='period'>2010 — 2018</span></span>
+        <span class='expand'><Icon name='plus' size={18} /></span>
+      </summary>
+      <div class='earlier-jobs'>
+        {
+          earlierExperience.map((job) => (
+            <article>
+              <div>
+                <h3>{job.company}</h3>
+                <p>{job.role}</p>
+                <p class='earlier-description'>{job.description}</p>
+              </div>
+              <p class='period'>{job.period}</p>
+            </article>
+          ))
+        }
+      </div>
+    </details>
+  </div>
+</section>
+
+<style>
+  .experience {
+    margin-top: 80px;
+    padding-top: 56px;
+    border-top: 1px solid var(--line);
+  }
+  .list {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+  }
+  .job {
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    padding: 28px;
+  }
+  .job + .job {
+    border-top: 1px solid var(--line);
+  }
+  .company {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: #9b2678;
+    background: #faf1f7;
+    font: 600 24px/1 var(--font-display);
+  }
+  .company.current {
+    border-color: #d9e9de;
+    color: #23683a;
+    background: #eaf4ed;
+  }
+  .job-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .job-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .job-heading h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .badge {
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #267347;
+    background: #edf5ef;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .period {
+    color: var(--muted);
+    font: 10px/1.5 var(--mono);
+    white-space: nowrap;
+  }
+  .role {
+    margin-top: 4px;
+    color: var(--ink);
+    font-size: 12px;
+  }
+  .context {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+  }
+  .description {
+    max-width: 78ch;
+    margin-top: 16px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 10px;
+  }
+  .earlier {
+    border-top: 1px solid var(--line);
+  }
+  .earlier > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 72px;
+    padding: 14px 28px;
+    color: var(--ink);
+    font-size: 12px;
+  }
+  .earlier > summary:hover {
+    background: var(--canvas);
+  }
+  .earlier > summary .period {
+    margin-left: 12px;
+  }
+  .expand {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+  }
+  .earlier[open] .expand {
+    transform: rotate(45deg);
+  }
+  .earlier-jobs {
+    padding: 0 28px 12px;
+  }
+  .earlier-jobs article {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    font-size: 11px;
+  }
+  .earlier-jobs h3 {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .earlier-description {
+    max-width: 55ch;
+    margin-top: 8px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .experience {
+      margin-top: 64px;
+      padding-top: 48px;
+    }
+    .job {
+      gap: 16px;
+      padding: 22px;
+    }
+    .job-heading {
+      display: block;
+    }
+    .job-heading .period {
+      margin-top: 4px;
+    }
+  }
+  @media (max-width: 600px) {
+    .experience {
+      margin-top: 48px;
+      padding-top: 40px;
+    }
+    .job {
+      gap: 12px;
+      padding: 22px 18px;
+    }
+    .company {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 21px;
+    }
+    .job-heading h3 {
+      font-size: 16px;
+    }
+    .tags {
+      gap: 6px 12px;
+      font-size: 9px;
+    }
+    .earlier > summary {
+      padding: 16px 18px;
+    }
+    .earlier-jobs {
+      padding-inline: 18px;
+    }
+  }
+</style>
