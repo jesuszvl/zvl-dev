@@ -1,0 +1,152 @@
+---
+import '../styles/admin.css'
+---
+
+<!doctype html>
+<html lang='en'>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='robots' content='noindex, nofollow' />
+    <title>Portfolio Admin | Jesús Zavala</title>
+  </head>
+  <body>
+    <!--
+      THESIS: A private operating surface for publishing portfolio content and managing portrait assets, not a public marketing page.
+      OWN-WORLD: Quiet editorial dashboard language, pale blue workspace, ink controls, dense tables, and small-radius panels.
+      STORY: Sign in, confirm admin access, review content state, add portrait references, and record generation drafts.
+      FIRST VIEWPORT: Login or dashboard fills the page; action rail stays at the top, work panels sit in a responsive grid.
+      FORM: Code-led practical scaffold for a single-user Supabase admin.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <main class='admin-shell'>
+      <section class='auth-shell' data-auth-panel>
+        <div class='auth-card' aria-labelledby='login-title'>
+          <span class='monogram' aria-hidden='true'>jz</span>
+          <h1 id='login-title'>Portfolio Admin</h1>
+          <p class='admin-subtitle'>Sign in to manage jesuszavala.dev</p>
+          <form class='login-form' data-login-form>
+            <label for='email'>Email</label>
+            <div class='input-row'>
+              <input
+                id='email'
+                name='email'
+                type='email'
+                inputmode='email'
+                autocomplete='email'
+                placeholder='you@example.com'
+                required
+              />
+              <button type='submit'>Send link</button>
+            </div>
+          </form>
+          <p class='status-copy' data-login-status role='status'></p>
+        </div>
+      </section>
+
+      <section class='dashboard' data-dashboard hidden>
+        <header class='topbar'>
+          <div>
+            <h1>Portfolio Admin</h1>
+            <p class='admin-subtitle'>Content operations for jesuszavala.dev</p>
+          </div>
+          <div class='topbar-actions'>
+            <button type='button' data-refresh>Refresh</button>
+            <button type='button' class='secondary' data-sign-out>Sign out</button>
+          </div>
+        </header>
+
+        <section class='status-strip' aria-label='Connection status'>
+          <div>
+            <span class='status-dot' aria-hidden='true'></span>
+            <span data-admin-email>Signed in</span>
+          </div>
+          <div data-updated-at>Waiting for data</div>
+        </section>
+
+        <div class='workspace-grid'>
+          <section class='panel span-2' aria-labelledby='content-title'>
+            <div class='panel-header'>
+              <div>
+                <h2 id='content-title'>Portfolio versions</h2>
+              </div>
+              <button type='button' data-create-draft>Create draft</button>
+            </div>
+            <div class='table-shell'>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Summary</th>
+                    <th>Updated</th>
+                  </tr>
+                </thead>
+                <tbody data-content-list>
+                  <tr>
+                    <td colspan='4'>No content loaded.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class='panel' aria-labelledby='reference-title'>
+            <div class='panel-header'>
+              <div>
+                <h2 id='reference-title'>Reference library</h2>
+              </div>
+            </div>
+            <form class='stack-form' data-upload-form>
+              <label for='portrait-reference'>Reference image</label>
+              <input
+                id='portrait-reference'
+                name='file'
+                type='file'
+                accept='image/png,image/jpeg,image/webp'
+                required
+              />
+              <label for='reference-alt'>Alt text</label>
+              <input
+                id='reference-alt'
+                name='altText'
+                type='text'
+                placeholder='Portrait reference'
+              />
+              <button type='submit'>Upload reference</button>
+            </form>
+            <ul class='asset-list' data-asset-list>
+              <li>No assets loaded.</li>
+            </ul>
+          </section>
+
+          <section class='panel' aria-labelledby='generation-title'>
+            <div class='panel-header'>
+              <div>
+                <h2 id='generation-title'>Portrait drafts</h2>
+              </div>
+            </div>
+            <form class='stack-form' data-generation-form>
+              <label for='generation-prompt'>Prompt</label>
+              <textarea
+                id='generation-prompt'
+                name='prompt'
+                rows='7'
+              >Standing portfolio portrait of Jesus Zavala, short hair, plain black t-shirt, transparent background, natural studio lighting.</textarea>
+              <button type='submit'>Save generation draft</button>
+            </form>
+            <ul class='asset-list' data-generation-list>
+              <li>No generation drafts loaded.</li>
+            </ul>
+          </section>
+        </div>
+
+        <p class='status-copy dashboard-status' data-dashboard-status role='status'></p>
+      </section>
+    </main>
+
+    <script>
+      import '../scripts/admin'
+    </script>
+  </body>
+</html>
