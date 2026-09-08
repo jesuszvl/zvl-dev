@@ -6,30 +6,32 @@ This project stores admin-managed portfolio content and portrait assets for
 ## Connected Project
 
 - Project URL: `https://eeltmgmeuxnajoggevct.supabase.co`
+- Project ref: `eeltmgmeuxnajoggevct`
 - Public admin domain target: `admin.jesuszavala.dev`
 - Admin app path: `apps/admin`
 - Public site app path: `apps/site`
 
-The Supabase MCP connector can currently read the project URL, but other
-project operations are failing with a connector-side ByteString encoding error.
-Until that is resolved, apply the SQL from Supabase Studio or a linked local
-CLI session.
+## Applied State
 
-## Apply Locally Or In Studio
+The schema, seed, and admin user are already applied to the project above.
+`site_admins` holds one row for `jesuszavalavalle@gmail.com`.
 
-1. Open Supabase Studio for the `jesuszavala.dev` project.
-2. Run `migrations/20260908204822_portfolio_admin_schema.sql` in the SQL editor.
-3. Run `seed.sql` to insert the first published content version.
-4. Create or invite your admin user in Auth.
-5. Insert the admin row with that Auth user ID:
+To re-apply after adding a migration:
+
+```sh
+supabase link --project-ref eeltmgmeuxnajoggevct
+supabase db push                 # migrations only
+supabase db push --include-seed  # also re-runs seed.sql (idempotent)
+```
+
+Adding another admin means creating the user in Auth, then inserting their
+Auth user ID:
 
 ```sql
 insert into public.site_admins (user_id, email)
-values ('00000000-0000-0000-0000-000000000000', lower('jesus@zvl.dev'))
+values ('<auth-user-uuid>', lower('someone@example.com'))
 on conflict (user_id) do update set email = excluded.email;
 ```
-
-Replace the UUID with the real user ID from Supabase Auth.
 
 ## Data Model
 
