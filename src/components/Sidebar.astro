@@ -1,0 +1,273 @@
+---
+import Icon from './Icon.astro'
+
+const navigation = [
+  { href: '#work', label: 'Selected work', icon: 'grid' },
+  { href: '#experience', label: 'Experience', icon: 'briefcase' },
+  { href: '#about', label: 'About me', icon: 'person' },
+  { href: '#contact', label: 'Get in touch', icon: 'mail' }
+] as const
+---
+
+<header class='sidebar'>
+  <a href='#intro' class='identity' aria-label='Jesús Zavala, back to introduction'>
+    <span class='monogram' aria-hidden='true'>jz<span>.</span></span>
+    <span class='identity-text'>
+      <strong>Jesús Zavala</strong>
+      <span>Software & product engineer</span>
+    </span>
+  </a>
+  <nav aria-label='Primary'>
+    {
+      navigation.map((item) => (
+        <a href={item.href} data-nav>
+          <Icon name={item.icon} size={18} />
+          <span>{item.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+  <div class='sidebar-bottom'>
+    <p class='current-role'>
+      <span class='status-dot' aria-hidden='true'></span>
+      <span>Currently building at<strong>Gametime</strong></span>
+    </p>
+    <p class='sidebar-links'>
+      <a href='https://github.com/jesuszvl' target='_blank' rel='noopener noreferrer'>
+        GitHub <Icon name='arrow-up-right' size={15} />
+      </a>
+      <a href='https://www.linkedin.com/in/jesuszvl/' target='_blank' rel='noopener noreferrer'>
+        LinkedIn <Icon name='arrow-up-right' size={15} />
+      </a>
+    </p>
+    <p class='sidebar-note'>Made with care.<br />From Mexicali, México.</p>
+  </div>
+</header>
+
+<script>
+  // Highlight the section that currently sits in the top third of the viewport.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav]'))
+  const sections = links.map((link) => document.querySelector<HTMLElement>(link.hash))
+  let scheduled = false
+  const update = () => {
+    const marker = window.innerHeight * 0.35
+    let active = ''
+    sections.forEach((section) => {
+      if (section && section.getBoundingClientRect().top <= marker) active = '#' + section.id
+    })
+    const atBottom =
+      window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+    if (atBottom) active = '#contact'
+    links.forEach((link) => {
+      if (link.hash === active) link.setAttribute('aria-current', 'location')
+      else link.removeAttribute('aria-current')
+    })
+    scheduled = false
+  }
+  const schedule = () => {
+    if (!scheduled) {
+      scheduled = true
+      requestAnimationFrame(update)
+    }
+  }
+  window.addEventListener('scroll', schedule, { passive: true })
+  window.addEventListener('resize', schedule)
+  update()
+</script>
+
+<style>
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    width: var(--sidebar);
+    padding: 40px 28px 28px;
+    border-right: 1px solid var(--line);
+    background: var(--surface);
+    overflow-y: auto;
+  }
+  .identity {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    color: var(--ink);
+  }
+  .monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding-bottom: 4px;
+    border-radius: 13px;
+    background: var(--accent);
+    color: #fff;
+    font: 600 33px/1 var(--font-display);
+    letter-spacing: -0.12em;
+  }
+  .monogram span {
+    color: #bac6ff;
+  }
+  .identity-text {
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+  }
+  .identity-text strong {
+    font: 600 21px/1.2 var(--font-display);
+    letter-spacing: -0.025em;
+  }
+  .identity-text > span {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 60px;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    margin-inline: -10px;
+    padding: 0 12px;
+    border-radius: 6px;
+    color: var(--body);
+    font-size: 12px;
+  }
+  nav a:hover {
+    background: var(--canvas);
+    color: var(--ink);
+  }
+  nav a[aria-current] {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 500;
+  }
+  nav a[aria-current]::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .sidebar-bottom {
+    margin-top: auto;
+    padding-top: 40px;
+  }
+  .current-role {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 11px;
+  }
+  .current-role strong {
+    display: block;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .sidebar-links {
+    display: flex;
+    gap: 18px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .sidebar-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 11px;
+  }
+  .sidebar-note {
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.8;
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      padding: 16px 28px 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      overflow: visible;
+    }
+    .identity {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      width: fit-content;
+    }
+    .monogram {
+      width: 37px;
+      height: 37px;
+      border-radius: 10px;
+      font-size: 28px;
+    }
+    .identity-text {
+      margin-top: 0;
+    }
+    .identity-text strong {
+      font-size: 18px;
+    }
+    .identity-text > span {
+      margin-top: 2px;
+      font-size: 10px;
+    }
+    nav {
+      flex-direction: row;
+      gap: 22px;
+      margin-top: 12px;
+    }
+    nav a {
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      font-size: 11px;
+    }
+    nav a:hover {
+      background: transparent;
+    }
+    nav a[aria-current] {
+      background: transparent;
+      border-bottom-color: var(--accent);
+    }
+    nav a[aria-current]::after {
+      display: none;
+    }
+    .sidebar-bottom {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .sidebar {
+      padding-inline: 20px;
+    }
+    nav {
+      justify-content: space-between;
+      gap: 8px;
+    }
+    nav a {
+      gap: 5px;
+      font-size: 10px;
+    }
+    nav :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+  }
+</style>

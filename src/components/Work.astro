@@ -1,0 +1,305 @@
+---
+import { Image } from 'astro:assets'
+import Icon from './Icon.astro'
+import { projects } from '../data/portfolio'
+---
+
+<section id='work' class='section' aria-labelledby='work-title'>
+  <div class='section-heading'>
+    <div>
+      <p class='eyebrow'>
+        Selected work <span class='chip'>{String(projects.length).padStart(2, '0')}</span>
+      </p>
+      <h2 id='work-title'>Built with a purpose.</h2>
+    </div>
+    <p>Independent projects for real communities, businesses, and everyday problems.</p>
+  </div>
+  <div class='grid'>
+    {
+      projects.map((project) => (
+        <article class={'project-' + project.theme}>
+          <a
+            class='visual'
+            href={project.url}
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label={'Visit ' + project.name + ' (opens in a new tab)'}
+          >
+            <div class='visual-top'>
+              <span>{project.category}</span>
+              <span class='visual-arrow'>
+                <Icon name='arrow-up-right' size={20} />
+              </span>
+            </div>
+            <div class='browser'>
+              <div class='browser-bar' aria-hidden='true'>
+                <span class='browser-dots'>
+                  <i></i>
+                  <i></i>
+                  <i></i>
+                </span>
+                <span>{project.domain}</span>
+              </div>
+              <Image
+                src={project.image}
+                alt={project.imageAlt}
+                widths={[480, 800, 1200]}
+                sizes='(max-width: 600px) 90vw, (max-width: 900px) 45vw, 36vw'
+                width={800}
+                height={600}
+                loading='lazy'
+                quality={82}
+              />
+            </div>
+          </a>
+          <div class='info'>
+            <div class='title'>
+              <h3>
+                <a href={project.url} target='_blank' rel='noopener noreferrer'>
+                  {project.name} <Icon name='arrow-up-right' size={20} />
+                </a>
+              </h3>
+              <span class='chip'>{project.status}</span>
+            </div>
+            <p class='headline'>{project.headline}</p>
+            <p class='description'>{project.description}</p>
+            <details>
+              <summary>
+                What I built <Icon name='plus' size={15} />
+              </summary>
+              <p>{project.contribution}</p>
+            </details>
+            <ul class='stack' aria-label={project.name + ' technologies and capabilities'}>
+              {project.stack.map((tech) => (
+                <li>{tech}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+  <a
+    class='text-link github'
+    href='https://github.com/jesuszvl'
+    target='_blank'
+    rel='noopener noreferrer'
+  >
+    More experiments and code on GitHub <Icon name='arrow-up-right' size={16} />
+  </a>
+</section>
+
+<style>
+  .eyebrow .chip {
+    margin-left: 6px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 24px;
+  }
+  article {
+    min-width: 0;
+  }
+  .project-nowildo {
+    --tint: #e9e8f3;
+    --tint-ink: #4f4669;
+  }
+  .project-mexicali {
+    --tint: #f5e8dd;
+    --tint-ink: #7a5943;
+  }
+  .project-prep {
+    --tint: #f2e6ee;
+    --tint-ink: #845471;
+  }
+  .project-vodyet {
+    --tint: #e3eee8;
+    --tint-ink: #446a58;
+  }
+  .visual {
+    display: block;
+    overflow: hidden;
+    padding: 16px 20px 0;
+    border-radius: 10px;
+    color: var(--tint-ink);
+    background: var(--tint);
+  }
+  .visual:hover {
+    color: var(--tint-ink);
+  }
+  .visual-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 9px;
+  }
+  .visual-arrow {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #20212825;
+    border-radius: 50%;
+  }
+  .browser {
+    overflow: hidden;
+    border: 1px solid #20212818;
+    border-bottom: 0;
+    border-radius: 6px 6px 0 0;
+    background: #fff;
+    box-shadow: 0 8px 25px #20212815;
+    transform: translateY(4px);
+    transition: transform 240ms;
+  }
+  .visual:hover .browser {
+    transform: none;
+  }
+  .browser-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    height: 24px;
+    padding: 0 8px;
+    color: var(--muted);
+    background: #fafafa;
+    font: 7px/1 var(--mono);
+    text-align: center;
+  }
+  .browser-dots {
+    display: flex;
+    gap: 3px;
+  }
+  .browser-dots i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #d5d8df;
+  }
+  .browser :global(img) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: top;
+  }
+  .info {
+    padding-top: 20px;
+  }
+  .title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  h3 {
+    font: 600 24px/1.2 var(--font-display);
+    letter-spacing: -0.035em;
+  }
+  h3 a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 :global(svg) {
+    color: var(--muted);
+  }
+  .headline {
+    margin-top: 12px;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .description {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  details {
+    margin-top: 12px;
+    font-size: 11px;
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    min-height: 32px;
+    color: var(--ink);
+  }
+  summary:hover {
+    color: var(--accent);
+  }
+  details[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+  details > p {
+    max-width: 46ch;
+    margin: 4px 0 12px;
+    padding-left: 12px;
+    border-left: 2px solid var(--line);
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .stack li {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #edf0f4;
+    font-size: 9px;
+  }
+  .github {
+    margin-top: 36px;
+    font-size: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .visual {
+      padding: 12px 12px 0;
+    }
+    .visual-top {
+      margin-bottom: 12px;
+      font-size: 8px;
+    }
+    .visual-arrow {
+      width: 24px;
+      height: 24px;
+    }
+    h3 {
+      font-size: 22px;
+    }
+  }
+  @media (max-width: 600px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .visual {
+      padding: 16px 20px 0;
+    }
+    .visual-top {
+      margin-bottom: 16px;
+      font-size: 9px;
+    }
+    h3 {
+      font-size: 24px;
+    }
+    .headline,
+    .description {
+      font-size: 13px;
+    }
+    details {
+      font-size: 12px;
+    }
+    .stack li {
+      font-size: 10px;
+    }
+  }
+</style>
