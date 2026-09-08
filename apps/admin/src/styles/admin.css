@@ -145,10 +145,9 @@ td {
   width: 42px;
   height: 42px;
   place-items: center;
-  color: var(--accent, #2547ed);
-  font-size: 2.1rem;
-  font-weight: 600;
-  line-height: 1;
+  color: var(--ink);
+  height: 38px;
+  width: auto;
 }
 
 .admin-subtitle {

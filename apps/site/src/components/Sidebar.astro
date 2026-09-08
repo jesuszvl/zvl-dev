@@ -11,7 +11,10 @@ const navigation = [
 
 <header class='sidebar'>
   <a href='#intro' class='identity' aria-label='Jesús Zavala, back to introduction'>
-    <span class='monogram' aria-hidden='true'>✳</span>
+    <svg class='monogram' viewBox='4 15 92 70' fill='none' aria-hidden='true'>
+      <path d='M11 78A21 21 0 0 0 32 57V22H86L40 78H74' stroke='currentColor' stroke-width='14' />
+      <rect x='82' y='71' width='14' height='14' fill='var(--accent)' />
+    </svg>
     <span class='identity-text'>
       <strong>Jesús Zavala</strong>
       <span>Software & product engineer</span>
@@ -95,13 +98,9 @@ const navigation = [
     color: var(--ink);
   }
   .monogram {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    color: var(--accent);
-    font: 600 42px/1 var(--font-display);
+    height: 42px;
+    width: auto;
+    color: var(--ink);
   }
   .identity-text {
     display: flex;
@@ -204,9 +203,7 @@ const navigation = [
       width: fit-content;
     }
     .monogram {
-      width: 34px;
-      height: 34px;
-      font-size: 32px;
+      height: 32px;
     }
     .identity-text {
       margin-top: 0;
