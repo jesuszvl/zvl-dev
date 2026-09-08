@@ -5,7 +5,7 @@ This project stores admin-managed portfolio content and portrait assets for
 
 ## Connected Project
 
-- Project URL: `https://xinydijbceyopouscxoc.supabase.co`
+- Project URL: `https://eeltmgmeuxnajoggevct.supabase.co`
 - Public admin domain target: `admin.jesuszavala.dev`
 - Admin app path: `apps/admin`
 - Public site app path: `apps/site`
@@ -59,7 +59,7 @@ uploads, updates, and deletes for both buckets.
 Set these on the Vercel admin project:
 
 ```sh
-PUBLIC_SUPABASE_URL=https://xinydijbceyopouscxoc.supabase.co
+PUBLIC_SUPABASE_URL=https://eeltmgmeuxnajoggevct.supabase.co
 PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 ```
 

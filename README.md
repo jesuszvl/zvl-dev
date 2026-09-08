@@ -25,7 +25,7 @@ The admin app reads Supabase browser env vars from `apps/admin/.env` in local
 development:
 
 ```sh
-PUBLIC_SUPABASE_URL=https://xinydijbceyopouscxoc.supabase.co
+PUBLIC_SUPABASE_URL=https://eeltmgmeuxnajoggevct.supabase.co
 PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 ```
 
