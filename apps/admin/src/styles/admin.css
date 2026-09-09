@@ -32,6 +32,11 @@ body {
   margin: 0;
 }
 
+/* .auth-shell and friends set display, which beats the UA rule for [hidden]. */
+[hidden] {
+  display: none !important;
+}
+
 button,
 input,
 textarea {
