@@ -2,8 +2,8 @@
 import Icon from './Icon.astro'
 
 const navigation = [
-  { href: '#work', label: 'Selected work', icon: 'grid' },
   { href: '#experience', label: 'Experience', icon: 'briefcase' },
+  { href: '#work', label: 'Selected work', icon: 'grid' },
   { href: '#about', label: 'About me', icon: 'person' },
   { href: '#contact', label: 'Get in touch', icon: 'mail' }
 ] as const
@@ -113,7 +113,7 @@ const navigation = [
   .identity-text > span {
     margin-top: 6px;
     color: var(--muted);
-    font-size: 11px;
+    font-size: 13px;
   }
   nav {
     display: flex;
@@ -130,7 +130,7 @@ const navigation = [
     padding: 0 12px;
     border-radius: 6px;
     color: var(--body);
-    font-size: 12px;
+    font-size: 14px;
   }
   nav a:hover {
     background: var(--canvas);
@@ -157,12 +157,12 @@ const navigation = [
     display: flex;
     align-items: baseline;
     gap: 10px;
-    font-size: 11px;
+    font-size: 13px;
   }
   .current-role strong {
     display: block;
     color: var(--ink);
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
   }
   .sidebar-links {
@@ -176,7 +176,7 @@ const navigation = [
     display: inline-flex;
     align-items: center;
     gap: 3px;
-    font-size: 11px;
+    font-size: 13px;
   }
 
   @media (max-width: 900px) {
@@ -202,11 +202,11 @@ const navigation = [
       margin-top: 0;
     }
     .identity-text strong {
-      font-size: 18px;
+      font-size: 20px;
     }
     .identity-text > span {
       margin-top: 2px;
-      font-size: 10px;
+      font-size: 12px;
     }
     nav {
       flex-direction: row;
@@ -219,7 +219,7 @@ const navigation = [
       padding: 0;
       border-bottom: 2px solid transparent;
       border-radius: 0;
-      font-size: 11px;
+      font-size: 13px;
     }
     nav a:hover {
       background: transparent;
