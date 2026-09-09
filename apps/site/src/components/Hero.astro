@@ -134,9 +134,17 @@ import { portrait, portraitAlt } from '../lib/portrait'
     background: transparent;
   }
   .portrait-image :global(img) {
+    --portrait-fade: linear-gradient(
+      to bottom,
+      #000 74%,
+      rgba(0, 0, 0, 0.85) 82%,
+      transparent 100%
+    );
     width: 100%;
     height: 100%;
     object-fit: cover;
+    -webkit-mask-image: var(--portrait-fade);
+    mask-image: var(--portrait-fade);
   }
 
   @media (max-width: 900px) {
