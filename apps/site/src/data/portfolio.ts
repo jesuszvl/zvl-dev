@@ -80,8 +80,8 @@ export const experience = [
     role: 'Software Engineer',
     context: 'Consumer marketplace · Remote',
     description:
-      'Building the web product alongside Design, Product, and Backend. My work spans frontend systems, SEO improvements, conversion, and code review.',
-    tags: ['Frontend engineering', 'SEO', 'Product collaboration'],
+      'Leading conversion and pricing-transparency work across the purchase journey, from planning with Product, Design, and Backend through experimentation and rollout. The unified event header I shipped added $5.1M in annualized GMV and 1.83% purchase conversion.',
+    tags: ['Conversion & experimentation', 'Frontend architecture', 'SEO'],
     current: true
   },
   {
@@ -91,7 +91,7 @@ export const experience = [
     role: 'Full-stack Software Engineer',
     context: 'Instituto Estatal Electoral de Baja California',
     description:
-      'Designed and maintained systems used during live elections, improved data consistency, and built Django REST APIs for internal data tracking.',
+      'Built the electoral records and district vote-counting platform that carried 17 electoral districts through the 2020–2021 election, along with the internal systems and statistical reporting used around it.',
     tags: ['Election systems', 'Django', 'Data integrity'],
     current: false
   }
@@ -117,7 +117,7 @@ export const earlierExperience = [
     period: '2010 — 2016',
     role: 'Software Developer & IT Support',
     description:
-      'Business-process automation and IT support for regional companies.'
+      'Point-of-sale, inventory, and HR platforms, plus fuel monitoring across service stations and transport fleets.'
   }
 ]
 

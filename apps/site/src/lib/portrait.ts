@@ -1,4 +1,4 @@
-import fallback from '../images/portrait-standing-transparent.png'
+import fallback from '../images/portrait-original-belly-up.png'
 
 // publish-portrait writes the approved portrait to this exact path.
 const PUBLISHED =
