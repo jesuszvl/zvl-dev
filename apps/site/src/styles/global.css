@@ -1,16 +1,37 @@
 :root {
+  color-scheme: light;
   --canvas: #f7f8fa;
   --surface: #ffffff;
   --ink: #202128;
   --body: #535a67;
   --muted: #68707c;
   --line: #e0e4ec;
+  /* --accent is text/borders; --accent-solid backs white text. They diverge in dark. */
   --accent: #2547ed;
-  --accent-hover: #1735c4;
+  --accent-solid: #2547ed;
+  --accent-solid-hover: #1735c4;
   --accent-soft: #edf0ff;
+  --chip-bg: #edf0f4;
   --green: #27805a;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --sidebar: 246px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #101116;
+    --surface: #17181f;
+    --ink: #f2f3f7;
+    --body: #b0b6c4;
+    --muted: #8a91a1;
+    --line: #282b36;
+    --accent: #8ba0ff;
+    --accent-solid: #2f4fe0;
+    --accent-solid-hover: #3f5cf0;
+    --accent-soft: #1e2547;
+    --chip-bg: #23262f;
+    --green: #4ade80;
+  }
 }
 * {
   box-sizing: border-box;
@@ -92,7 +113,7 @@ summary::-webkit-details-marker {
   display: none;
 }
 ::selection {
-  background: var(--accent);
+  background: var(--accent-solid);
   color: #fff;
 }
 :focus-visible {
@@ -138,13 +159,13 @@ summary::-webkit-details-marker {
   min-height: 48px;
   padding: 0 20px;
   border-radius: 7px;
-  background: var(--accent);
+  background: var(--accent-solid);
   color: #fff;
   font-size: 15px;
   font-weight: 500;
 }
 .button:hover {
-  background: var(--accent-hover);
+  background: var(--accent-solid-hover);
   color: #fff;
 }
 .chip {
@@ -168,7 +189,7 @@ summary::-webkit-details-marker {
   margin-top: 12px;
   font-size: clamp(32px, 3.1vw, 43px);
   line-height: 1.12;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.04em;
 }
 .section-heading > p {
   max-width: 31ch;
@@ -205,12 +226,12 @@ summary::-webkit-details-marker {
   padding: 12px 18px;
   border-radius: 6px;
   background: var(--ink);
-  color: #fff;
+  color: var(--canvas);
   transform: translateY(-160%);
 }
 .skip-link:focus {
   transform: none;
-  color: #fff;
+  color: var(--canvas);
 }
 
 @media (max-width: 900px) {
