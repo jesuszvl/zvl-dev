@@ -115,8 +115,7 @@ td {
   font-size: 0.9rem;
 }
 
-.admin-shell,
-.auth-body {
+.admin-shell {
   min-height: 100vh;
 }
 
@@ -134,10 +133,6 @@ td {
   background: var(--panel);
   box-shadow: var(--shadow);
   padding: clamp(24px, 5vw, 42px);
-}
-
-.auth-card.compact {
-  text-align: center;
 }
 
 .monogram {
@@ -185,25 +180,11 @@ h2 {
   margin-top: 28px;
 }
 
-.input-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 10px;
-}
-
 .status-copy {
   min-height: 22px;
   margin: 18px 0 0;
   color: var(--muted);
   line-height: 1.5;
-}
-
-.text-link {
-  display: inline-block;
-  margin-top: 18px;
-  color: var(--accent-dark);
-  font-weight: 800;
-  text-underline-offset: 4px;
 }
 
 .dashboard {
@@ -338,7 +319,6 @@ h2 {
     font-size: 1.18rem;
   }
 
-  .input-row,
   .workspace-grid {
     grid-template-columns: 1fr;
   }
