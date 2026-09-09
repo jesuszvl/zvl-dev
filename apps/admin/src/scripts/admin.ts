@@ -193,18 +193,21 @@ function renderContentVersions(versions: ContentVersion[]) {
 
 async function renderAssets(assets: PortfolioAsset[]) {
   if (!assetGrid) return
-  assetGrid.textContent = ''
   if (referenceCount) {
     referenceCount.textContent = `${assets.length} photo${assets.length === 1 ? '' : 's'}`
   }
   if (assets.length === 0) {
     state.selected.clear()
+    assetGrid.textContent = ''
     emptyMessage(assetGrid, 'No reference photos yet.')
     return
   }
 
   const urls = await signedUrls(assets.map((asset) => asset.object_path))
 
+  // Clear after the await. Two overlapping loads would otherwise both clear
+  // first and then both append, showing every photo twice.
+  assetGrid.textContent = ''
   assets.forEach((asset) => {
     const figure = document.createElement('label')
     const checkbox = document.createElement('input')
@@ -253,8 +256,8 @@ async function renderAssets(assets: PortfolioAsset[]) {
 
 async function renderGenerations(generations: PortraitGeneration[]) {
   if (!generationGrid) return
-  generationGrid.textContent = ''
   if (generations.length === 0) {
+    generationGrid.textContent = ''
     emptyMessage(generationGrid, 'Nothing generated yet.')
     return
   }
@@ -264,6 +267,7 @@ async function renderGenerations(generations: PortraitGeneration[]) {
     .filter((path): path is string => Boolean(path))
   const urls = await signedUrls(paths)
 
+  generationGrid.textContent = ''
   generations.forEach((generation) => {
     const figure = document.createElement('figure')
     const image = document.createElement('img')
@@ -502,48 +506,57 @@ createDraftButton?.addEventListener('click', async () => {
   await loadDashboard()
 })
 
+const uploadButton = uploadForm?.querySelector('button')
+
 uploadForm?.addEventListener('submit', async (event) => {
   event.preventDefault()
-  if (!supabase || !state.user) return
+  // A full selection takes tens of seconds to upload. Without this guard a
+  // second click starts the whole batch again, under fresh paths.
+  if (!supabase || !state.user || uploadButton?.disabled) return
 
   const files = new FormData(uploadForm).getAll('file').filter((f): f is File => f instanceof File)
   if (files.length === 0) return
 
-  for (const [index, file] of files.entries()) {
-    setDashboardStatus(`Uploading ${index + 1} of ${files.length}.`)
-    const path = `portrait-references/${state.user.id}/${Date.now()}-${safeFileName(file.name)}`
+  if (uploadButton) uploadButton.disabled = true
+  try {
+    for (const [index, file] of files.entries()) {
+      setDashboardStatus(`Uploading ${index + 1} of ${files.length}.`)
+      const path = `portrait-references/${state.user.id}/${Date.now()}-${safeFileName(file.name)}`
 
-    const { error: uploadError } = await supabase.storage
-      .from(BUCKET)
-      .upload(path, file, { cacheControl: '3600', contentType: file.type, upsert: false })
-    if (uploadError) {
-      setDashboardStatus(uploadError.message)
-      return
+      const { error: uploadError } = await supabase.storage
+        .from(BUCKET)
+        .upload(path, file, { cacheControl: '3600', contentType: file.type, upsert: false })
+      if (uploadError) {
+        setDashboardStatus(uploadError.message)
+        return
+      }
+
+      const { error: assetError } = await supabase.from('portfolio_assets').insert({
+        kind: 'portrait_reference',
+        bucket_id: BUCKET,
+        object_path: path,
+        alt_text: file.name,
+        metadata: {
+          contentType: file.type,
+          fileName: file.name,
+          fileSize: file.size,
+          source: 'admin'
+        },
+        is_public: false,
+        created_by: state.user.id
+      })
+      if (assetError) {
+        setDashboardStatus(assetError.message)
+        return
+      }
     }
 
-    const { error: assetError } = await supabase.from('portfolio_assets').insert({
-      kind: 'portrait_reference',
-      bucket_id: BUCKET,
-      object_path: path,
-      alt_text: file.name,
-      metadata: {
-        contentType: file.type,
-        fileName: file.name,
-        fileSize: file.size,
-        source: 'admin'
-      },
-      is_public: false,
-      created_by: state.user.id
-    })
-    if (assetError) {
-      setDashboardStatus(assetError.message)
-      return
-    }
+    uploadForm.reset()
+    setDashboardStatus('')
+    await loadDashboard()
+  } finally {
+    if (uploadButton) uploadButton.disabled = false
   }
-
-  uploadForm.reset()
-  setDashboardStatus('')
-  await loadDashboard()
 })
 
 const promptPreview = document.querySelector<HTMLTextAreaElement>('[data-prompt-preview]')
