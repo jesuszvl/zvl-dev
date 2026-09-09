@@ -9,8 +9,6 @@ import { portrait, portraitAlt } from '../lib/portrait'
     <p class='eyebrow'>A portfolio of things made real</p>
     <p class='local-time'>
       <span class='status-dot' aria-hidden='true'></span> Mexicali, MX
-      <span class='divider'>/</span>
-      <span data-clock>Pacific time</span>
     </p>
   </div>
   <div class='hero'>
@@ -46,20 +44,6 @@ import { portrait, portraitAlt } from '../lib/portrait'
   </div>
 </section>
 
-<script>
-  const clock = document.querySelector('[data-clock]')
-  const format = new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'America/Tijuana'
-  })
-  const tick = () => {
-    if (clock) clock.textContent = format.format(new Date())
-  }
-  tick()
-  setInterval(tick, 30_000)
-</script>
 
 <style>
   .intro {
@@ -72,22 +56,19 @@ import { portrait, portraitAlt } from '../lib/portrait'
     gap: 20px;
   }
   .topline .eyebrow {
-    font-size: 10px;
+    font-size: 12px;
   }
   .local-time {
     display: flex;
     align-items: center;
     gap: 8px;
     color: var(--muted);
-    font: 10px/1.4 var(--mono);
+    font: 12px/1.4 var(--mono);
     white-space: nowrap;
   }
   .local-time .status-dot {
     width: 5px;
     height: 5px;
-  }
-  .divider {
-    color: #a0a7b5;
   }
   .hero {
     display: grid;
@@ -102,7 +83,7 @@ import { portrait, portraitAlt } from '../lib/portrait'
     gap: 9px;
     margin-bottom: 20px;
     color: var(--ink);
-    font-size: 14px;
+    font-size: 16px;
   }
   .hello span {
     color: var(--accent);
@@ -120,14 +101,14 @@ import { portrait, portraitAlt } from '../lib/portrait'
   .description {
     max-width: 38ch;
     margin-top: 28px;
-    font-size: clamp(14px, 1.2vw, 18px);
+    font-size: clamp(16px, 1.2vw, 20px);
     line-height: 1.75;
   }
   .context {
     max-width: 42ch;
     margin-top: 12px;
     color: var(--muted);
-    font-size: 12px;
+    font-size: 14px;
   }
   .context strong {
     color: var(--ink);
@@ -178,12 +159,10 @@ import { portrait, portraitAlt } from '../lib/portrait'
     }
     .topline .eyebrow {
       max-width: 20ch;
-      font-size: 9px;
+      font-size: 11px;
     }
     .local-time {
-      flex-wrap: wrap;
-      justify-content: end;
-      font-size: 9px;
+      font-size: 11px;
     }
     .hero {
       grid-template-columns: 1fr;
@@ -198,7 +177,7 @@ import { portrait, portraitAlt } from '../lib/portrait'
       margin-top: 24px;
     }
     .context {
-      font-size: 11px;
+      font-size: 13px;
     }
     .portrait {
       max-width: none;

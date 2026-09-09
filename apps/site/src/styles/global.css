@@ -23,7 +23,7 @@ html {
 body {
   margin: 0;
   color: var(--body);
-  font: 400 15px/1.65 var(--font-sans);
+  font: 400 17px/1.65 var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 h1,
@@ -110,7 +110,7 @@ summary::-webkit-details-marker {
 /* Shared pieces */
 .eyebrow {
   color: var(--muted);
-  font: 400 11px/1.5 var(--mono);
+  font: 400 13px/1.5 var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -127,7 +127,7 @@ summary::-webkit-details-marker {
   align-items: center;
   gap: 8px;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
 }
 .button {
@@ -140,7 +140,7 @@ summary::-webkit-details-marker {
   border-radius: 7px;
   background: var(--accent);
   color: #fff;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
 }
 .button:hover {
@@ -152,7 +152,7 @@ summary::-webkit-details-marker {
   border: 1px solid var(--line);
   border-radius: 4px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 .section {
   padding-top: 80px;
@@ -172,7 +172,7 @@ summary::-webkit-details-marker {
 }
 .section-heading > p {
   max-width: 31ch;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.7;
 }
 
@@ -190,7 +190,7 @@ summary::-webkit-details-marker {
   gap: 16px;
   padding: 24px 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
 }
 .footer a {
   display: inline-flex;
@@ -229,7 +229,7 @@ summary::-webkit-details-marker {
 }
 @media (max-width: 600px) {
   body {
-    font-size: 14px;
+    font-size: 16px;
   }
   .page {
     padding-inline: 20px;
