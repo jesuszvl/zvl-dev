@@ -30,18 +30,24 @@ import '../styles/admin.css'
           <p class='admin-subtitle'>Sign in to manage jesuszavala.dev</p>
           <form class='login-form' data-login-form>
             <label for='email'>Email</label>
-            <div class='input-row'>
-              <input
-                id='email'
-                name='email'
-                type='email'
-                inputmode='email'
-                autocomplete='email'
-                placeholder='you@example.com'
-                required
-              />
-              <button type='submit'>Send link</button>
-            </div>
+            <input
+              id='email'
+              name='email'
+              type='email'
+              inputmode='email'
+              autocomplete='email'
+              placeholder='you@example.com'
+              required
+            />
+            <label for='password'>Password</label>
+            <input
+              id='password'
+              name='password'
+              type='password'
+              autocomplete='current-password'
+              required
+            />
+            <button type='submit'>Sign in</button>
           </form>
           <p class='status-copy' data-login-status role='status'></p>
         </div>

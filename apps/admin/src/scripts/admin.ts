@@ -441,18 +441,18 @@ loginForm?.addEventListener('submit', async (event) => {
 
   const formData = new FormData(loginForm)
   const email = String(formData.get('email') ?? '').trim().toLowerCase()
-  if (!email) return
+  const password = String(formData.get('password') ?? '')
+  if (!email || !password) return
 
-  setLoginStatus('Sending sign-in link.')
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${window.location.origin}/auth/confirm`,
-      shouldCreateUser: false
-    }
-  })
+  setLoginStatus('Signing in.')
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error) {
+    setLoginStatus(error.message)
+    return
+  }
 
-  setLoginStatus(error ? error.message : 'Check your email.')
+  loginForm.reset()
+  await bootstrap()
 })
 
 refreshButton?.addEventListener('click', () => {

@@ -36,7 +36,7 @@ PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 - `apps/site/src/layouts/Layout.astro` — public site metadata, fonts, structured data, and shell.
 - `apps/site/src/styles/global.css` — public site design tokens and shared CSS.
 - `apps/site/src/images/` — portrait and project screenshots optimized at build time.
-- `apps/admin/src/pages/` — admin routes, including `/` and `/auth/confirm`.
+- `apps/admin/src/pages/` — admin routes.
 - `apps/admin/src/scripts/` — Supabase Auth, admin checks, uploads, and content actions.
 - `apps/admin/src/lib/supabase.ts` — browser Supabase client.
 - `supabase/migrations/` — database and storage schema.
