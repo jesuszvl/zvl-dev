@@ -18,13 +18,7 @@ import { projects } from '../data/portfolio'
     {
       projects.map((project) => (
         <article class={'project-' + project.theme}>
-          <a
-            class='visual'
-            href={project.url}
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label={'Visit ' + project.name + ' (opens in a new tab)'}
-          >
+          <div class='visual'>
             <div class='visual-top'>
               <span>{project.category}</span>
               <span class='visual-arrow'>
@@ -51,11 +45,16 @@ import { projects } from '../data/portfolio'
                 quality={82}
               />
             </div>
-          </a>
+          </div>
           <div class='info'>
             <div class='title'>
               <h3>
-                <a href={project.url} target='_blank' rel='noopener noreferrer'>
+                <a
+                  href={project.url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label={'Visit ' + project.name + ' (opens in a new tab)'}
+                >
                   {project.name} <Icon name='arrow-up-right' size={20} />
                 </a>
               </h3>
@@ -69,7 +68,7 @@ import { projects } from '../data/portfolio'
               </summary>
               <p>{project.contribution}</p>
             </details>
-            <ul class='stack' aria-label={project.name + ' technologies and capabilities'}>
+            <ul class='stack' role='list' aria-label={project.name + ' technologies and capabilities'}>
               {project.stack.map((tech) => (
                 <li>{tech}</li>
               ))}
@@ -99,6 +98,7 @@ import { projects } from '../data/portfolio'
     gap: 40px 24px;
   }
   article {
+    position: relative;
     min-width: 0;
   }
   .project-nowildo {
@@ -117,6 +117,24 @@ import { projects } from '../data/portfolio'
     --tint: #e3eee8;
     --tint-ink: #446a58;
   }
+  @media (prefers-color-scheme: dark) {
+    .project-nowildo {
+      --tint: #232030;
+      --tint-ink: #c3bce0;
+    }
+    .project-mexicali {
+      --tint: #302620;
+      --tint-ink: #e0c3ab;
+    }
+    .project-prep {
+      --tint: #2e2129;
+      --tint-ink: #e0b6cf;
+    }
+    .project-vodyet {
+      --tint: #1e2a24;
+      --tint-ink: #a8d4bd;
+    }
+  }
   .visual {
     display: block;
     overflow: hidden;
@@ -124,9 +142,6 @@ import { projects } from '../data/portfolio'
     border-radius: 10px;
     color: var(--tint-ink);
     background: var(--tint);
-  }
-  .visual:hover {
-    color: var(--tint-ink);
   }
   .visual-top {
     display: flex;
@@ -142,7 +157,7 @@ import { projects } from '../data/portfolio'
     flex-shrink: 0;
     width: 28px;
     height: 28px;
-    border: 1px solid #20212825;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
     border-radius: 50%;
   }
   .browser {
@@ -155,7 +170,7 @@ import { projects } from '../data/portfolio'
     transform: translateY(4px);
     transition: transform 240ms;
   }
-  .visual:hover .browser {
+  article:hover .browser {
     transform: none;
   }
   .browser-bar {
@@ -205,6 +220,13 @@ import { projects } from '../data/portfolio'
     align-items: center;
     gap: 8px;
   }
+  /* Stretch the single card link over the whole article. */
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 10px;
+  }
   h3 :global(svg) {
     color: var(--muted);
   }
@@ -220,6 +242,8 @@ import { projects } from '../data/portfolio'
     line-height: 1.8;
   }
   details {
+    position: relative;
+    z-index: 1;
     margin-top: 12px;
     font-size: 13px;
   }
@@ -252,7 +276,7 @@ import { projects } from '../data/portfolio'
   .stack li {
     padding: 3px 8px;
     border-radius: 4px;
-    background: #edf0f4;
+    background: var(--chip-bg);
     font-size: 11px;
   }
   .github {

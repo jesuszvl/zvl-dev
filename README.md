@@ -43,8 +43,8 @@ PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
 
 Adding a project: drop a `.webp` in `apps/site/src/images/portfolio/`, add an
 entry to `projects` in `apps/site/src/data/portfolio.ts` with its audience, your
-contribution, stack, and actual status, and give its `theme` a tint in
-`Work.astro`. Keep prototypes and demos clearly labeled.
+contribution, stack, and actual status, and give its `theme` a light and a dark
+tint in `Work.astro`. Keep prototypes and demos clearly labeled.
 
 ## Replacing the hero portrait
 

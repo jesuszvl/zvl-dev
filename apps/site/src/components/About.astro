@@ -53,14 +53,14 @@ import { capabilities } from '../data/portfolio'
   }
   .intro {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
     gap: 40px;
   }
   .intro h2 {
     margin-top: 16px;
     font-size: clamp(30px, 3.05vw, 42px);
     line-height: 1.14;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
   }
   .copy {
     font-size: 15px;
